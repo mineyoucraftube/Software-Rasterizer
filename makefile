@@ -13,7 +13,7 @@ OBJ_DIR_CPP = $(OBJ_DIR)/obj_cpp
 
 OUT_DIR = $(BUILD_DIR)/out
 
-CFLAGS = 
+CFLAGS = -g
 
 
 #https://www.gnu.org/software/make/manual/html_node/Wildcard-Function.html ____LOOK AT THIS NEXT TIME____

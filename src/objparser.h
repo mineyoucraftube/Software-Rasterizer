@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include "graphics.h"
+#include "math.h"
 
 struct indexing {
   size_t file_index = 0;
@@ -17,31 +18,49 @@ struct indexing {
 };
 
 struct face {
-  int verti;
-  int uvi;
-  int normali;
+  const int num_vert;
+  int* verti;
+  int* uvi;
+  int* normali;
+  face(const int size) : num_vert(size) {
+    verti = new int[num_vert];
+    uvi = new int[num_vert];
+    normali = new int[num_vert];
+  }
 };
 
-struct raw_object {
+struct obj_object {
   const size_t num_vertice;
-  float3* verts;
   const size_t num_normal;
-  float3* normals;
   const size_t num_uv;
-  float2* uvs;
   const size_t num_face;
-  face* faces;
+  float3* verts;
+  float3* normals;
 
-  raw_object(const int v, const size_t n, const size_t t, const size_t f) : num_vertice(v), num_normal(n), num_uv(t), num_face(f) {
+  float2* uvs;
+  face** faces;
+
+  obj_object(const int v, const size_t n, const size_t t, const size_t f) : num_vertice(v), num_normal(n), num_uv(t), num_face(f) {
     verts = new float3[num_vertice];
     normals = new float3[num_normal];
     uvs = new float2[num_uv];
-    faces = new face[num_face];
+    faces = new face*[num_face];
   }
 };
 
 class objparser {
  private:
+  obj_object get_obj_params(char* file, size_t size);
+  float parsefloat(char* file, indexing* index);
+  int parseint(char* file, indexing* index);
+  void parsevert(char* file, obj_object object, indexing* index);
+  void parsenormal(char* file, obj_object object, indexing* index);
+  void parseUV(char* file, obj_object object, indexing* index);
+  void parseface(char* file, obj_object object, indexing* index);
+  void parseline(char* file, obj_object object, indexing* index);
+
  public:
-  raw_object parse(const char* filename);
+  obj_object parse(const char* filename);
+    simple_object rawObjToSimpleObj(obj_object rawobj);
+
 };

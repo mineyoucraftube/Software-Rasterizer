@@ -6,10 +6,10 @@
       "type": "cppdbg",
       "request": "launch",
       "args": [],
-      "stopAtEntry": false,
+      "stopAtEntry": true,
       "externalConsole": false,
-      "cwd": "/home/marc/.clonedrepos/Software-Rasterizer/src",
-      "program": "/home/marc/.clonedrepos/Software-Rasterizer/src/build/Debug/outDebug",
+      "cwd": "/home/marc/.clonedrepos/Software-Rasterizer/",
+      "program": "/home/marc/.clonedrepos/Software-Rasterizer/build/out/software_rasterizer",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

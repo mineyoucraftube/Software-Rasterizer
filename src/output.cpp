@@ -39,7 +39,7 @@ int output::output_image(image_s* image, int frame_num) {
   for (int i = 0; i < IMAGE_HEIGHT; i++) {
     for (int j = 0; j < IMAGE_WIDTH; j++) {
       k = (i * IMAGE_WIDTH) + j;
-      pixel_s* pix = &image->pixels[i][j];
+      pixel_s* pix = &image->pixels[j][i];
       image_buffer[0x36 + (k * 4) + 0] = (pix->b) * 255;
       image_buffer[0x36 + (k * 4) + 1] = (pix->g) * 255;
       image_buffer[0x36 + (k * 4) + 2] = (pix->r) * 255;

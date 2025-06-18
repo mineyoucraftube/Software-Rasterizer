@@ -3,14 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-
-
-
-#define IMAGE_WIDTH 256 * 16
-#define IMAGE_HEIGHT 256 * 16
-
-
-
+#define IMAGE_WIDTH 1024
+#define IMAGE_HEIGHT 1024
 
 class output {
  private:

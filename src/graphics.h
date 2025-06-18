@@ -1,49 +1,38 @@
 #pragma once
+#include <cstddef>
+#include "math.h"
 #include "typedef.h"
 
-struct float2 {
-  float x;
-  float y;
 
-  float2(float x = 0, float y = 0) : x(x), y(y) {}
-
-  float2 operator+(const float2& a) {
-    return float2(x + a.x, y + a.y);
-  }
-
-  float2 operator-(const float2& a) {
-    return float2(x - a.x, y - a.y);
-  }
-
-  float2 operator*(const float2& a) {
-    return float2(x * a.x, y * a.y);
-  }
-
-  float2 operator/(const float2& a) {
-    return float2(x / a.x, y / a.y);
-  }
-};
-
-struct float3 {
-  float x;
-  float y;
-  float z;
+struct triangle3 {
+  float3 a;
+  float3 b;
+  float3 c;
+  triangle3(float3 a = 0, float3 b = 0, float3 c = 0) : a(a), b(b), c(c) {}
 };
 struct triangle2 {
   float2 a;
   float2 b;
   float2 c;
-};
-struct triangle3 {
-  float3 a;
-  float3 b;
-  float3 c;
+
+  triangle2(float2 a = 0, float2 b = 0, float2 c = 0) : a(a), b(b), c(c) {}
+  triangle2(triangle3 a) : a(a.a.x, a.a.y), b(a.b.x, a.b.y), c(a.c.x, a.c.y) {}
 };
 
-struct object {
-  int num_vertice;
-  int num_triangle;
-  
+struct triangle {
+  triangle3 v;
+  float3 n;
+  triangle2 uv;
+  float3 color;
+};
+
+struct simple_object {
+  const size_t num_triangle;
+  triangle* tri;
+
+  simple_object(const int f) : num_triangle(f) {
+    tri = new triangle[num_triangle];
+  }
 };
 
 class graphics {
