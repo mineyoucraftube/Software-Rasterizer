@@ -1,5 +1,9 @@
 #pragma once
 
+#define mmin(a, b) ((a) < (b) ? (a) : (b))
+#define mmax(a, b) ((a) > (b) ? (a) : (b))
+#define mmap(x, in_min, in_max, out_min, out_max) (float(((x) - (in_min)) * ((out_max) - (out_min))) / ((in_max) - (in_min)) + (out_min))
+
 struct float3;
 
 struct float2 {
@@ -48,7 +52,6 @@ struct float3 {
     return float3(x / a.x, y / a.y, z / a.z);
   }
 };
-
 
 class math {
  private:

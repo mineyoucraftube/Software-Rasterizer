@@ -1,6 +1,5 @@
 #include "math.h"
 
-
 float2::float2(float3 a) : x(a.x), y(a.y) {}
 
 float math::min(float a, float b) {
@@ -19,11 +18,12 @@ float math::max(float a, float b) {
 float2 math::max(float2 a, float2 b) {
   return float2((a.x > b.x) ? a.x : b.x, (a.y > b.y) ? a.y : b.y);
 }
-float math::clamp(float a, float b, float c) {
-  return max(a, min(b, c));
-}
-float2 math::clamp(float2 a, float2 b, float2 c) {
-  return max(a, min(b, c));
+
+float math::clamp(float x, float low, float high) {
+  return max(low, min(x, high));
+} 
+float2 math::clamp(float2 x, float2 low, float2 high) {
+  return float2(max(low.x, min(x.x, high.x)),max(low.y, min(x.y, high.y)));
 }
 
 float math::exponent(float a, int b) {

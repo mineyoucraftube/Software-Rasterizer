@@ -186,10 +186,10 @@ void objparser::parseline(char* file, obj_object object, indexing* index) {
       break;
   }
 }
-//when exporting in blender, set forward axis -z and up axis y for veiw point [numpad 1] = rendered here
-//forward axis = top of view
-//top axis = towards camera
-obj_object objparser::parse(const char* filename) {       
+// when exporting in blender, set forward axis -z and up axis y for veiw point [numpad 1] = rendered here
+// forward axis = top of view
+// top axis = towards camera
+obj_object objparser::parse(const char* filename) {
   std::ifstream objfile(filename, std::ios::in | std::ios::binary | std::ios::ate);
   if (!objfile.is_open()) {
     std::cout << "Unable to open file";
@@ -247,20 +247,20 @@ simple_object objparser::rawObjToSimpleObj(obj_object rawobj) {
   size_t triangleindex = 0;
   for (int i = 0; (i < rawobj.num_face) && (i < trianglenumber); i++) {
     if (rawobj.faces[i]->num_vert == 3) {
-      if (i == 1) {
-        std::cout << rawobj.faces[i]->verti[0] << ' ';
-        std::cout << rawobj.faces[i]->verti[1] << ' ';
-        std::cout << rawobj.faces[i]->verti[2] << '\n';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[0]].x << ' ';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[0]].y << ' ';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[0]].z << '\t';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[1]].x << ' ';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[1]].y << ' ';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[1]].z << '\t';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[2]].x << ' ';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[2]].y << ' ';
-        std::cout << rawobj.verts[rawobj.faces[i]->verti[2]].z << '\n';
-      }
+      /*      if (i == 1) {
+              std::cout << rawobj.faces[i]->verti[0] << ' ';
+              std::cout << rawobj.faces[i]->verti[1] << ' ';
+              std::cout << rawobj.faces[i]->verti[2] << '\n';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[0]].x << ' ';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[0]].y << ' ';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[0]].z << '\t';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[1]].x << ' ';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[1]].y << ' ';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[1]].z << '\t';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[2]].x << ' ';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[2]].y << ' ';
+              std::cout << rawobj.verts[rawobj.faces[i]->verti[2]].z << '\n';
+            }*/
       simobj.tri[i].v.a = rawobj.verts[rawobj.faces[i]->verti[0]];
       simobj.tri[i].v.b = rawobj.verts[rawobj.faces[i]->verti[1]];
       simobj.tri[i].v.c = rawobj.verts[rawobj.faces[i]->verti[2]];

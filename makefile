@@ -22,6 +22,7 @@ SRC = $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/*.cpp)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_C)/%.o, $(wildcard $(SRC_DIR)/*.c)) $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR_CPP)/%.o, $(wildcard $(SRC_DIR)/*.cpp))
 SRC_C	= $(SRC_DIR)/%.c
 SRC_CPP	= $(SRC_DIR)/%.cpp
+SRC_C_CPP_H	= $(SRC_DIR)/%.h
 OBJ_C	= $(OBJ_DIR_C)/%.o
 OBJ_CPP	= $(OBJ_DIR_CPP)/%.o
 
@@ -31,22 +32,25 @@ OUT = $(OUT_DIR)/$(PROJECT_NAME)
 #OBJSSS = $(patsubst $(LIB_DIR)/%.a, $(OBJ_DIR)/%.o, $(SRC))
 
 
-all: $(OBJ) link
-
+all: $(OUT)
 
 $(OBJ_C): $(SRC_C)
 	@mkdir -p $(OBJ_DIR_C)
 	$(CC) $(CFLAGS) -c $^ -o $@
 	
+#$(OBJ_CPP): $(SRC_CPP) $(SRC_C_CPP_H)
+#	@mkdir -p $(OBJ_DIR_CPP)
+#	$(CPP) $(CFLAGS) -c $(patsubst $(SRC_DIR)/%.h, , $^) -o $@
+
 $(OBJ_CPP): $(SRC_CPP)
 	@mkdir -p $(OBJ_DIR_CPP)
-	$(CPP) $(CFLAGS) -c $^ -o $@
+	$(CPP) $(CFLAGS) -c $^ -o $@ 
 
-link: $(OUT)
 
 $(OUT): $(OBJ)
 	@mkdir -p $(OUT_DIR)
 	$(CPP) $(OBJ) -o $(OUT)
+	@echo "\033[0;32mgood to go\033[0m"
 
 
 run:

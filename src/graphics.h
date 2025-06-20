@@ -3,7 +3,6 @@
 #include "math.h"
 #include "typedef.h"
 
-
 struct triangle3 {
   float3 a;
   float3 b;
@@ -34,6 +33,19 @@ struct simple_object {
     tri = new triangle[num_triangle];
   }
 };
+struct pixel {
+  float r;
+  float g;
+  float b;
+  pixel() {}
+  pixel(float3 a) : r(a.x), g(a.y), b(a.z) {}
+};
+
+struct Image {
+  int x = 1024;
+  int y = 1024;
+  pixel pixels[1024][1024];
+};
 
 class graphics {
  private:
@@ -42,4 +54,7 @@ class graphics {
   float2 perpendicular(float2 a);
   bool PointOnRightSideOfLine(float2 a, float2 b, float2 p);
   bool PointInTriangle(triangle2 trig, float2 p);
+  float2 WorldToScreen(float3 a, int x, int y);
+
+  void render(simple_object* cube, Image* image);
 };
