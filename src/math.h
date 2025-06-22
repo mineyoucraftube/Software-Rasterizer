@@ -34,7 +34,8 @@ struct float3 {
   float x;
   float y;
   float z;
-  float3(float x = 0, float y = 0, float z = 0) : x(x), y(y), z(z) {}
+  float3(float x, float y, float z) : x(x), y(y), z(z) {}
+  float3(float x = 0) : x(x), y(x), z(x) {}
 
   float3 operator+(const float3& a) {
     return float3(x + a.x, y + a.y, z + a.z);

@@ -62,9 +62,23 @@ int main() {
     cube.tri[1].v.b = float3(0.6446806912547, 0.2370383654967, 1);
     cube.tri[1].v.c = float3(-0.4350328590401, 0.2425191449398, 1);
   */
+  
+  std::ofstream filea("data.txt", std::ios::out | std::ios::binary);
+  if (filea.is_open()) {
+    for (int asd = 0; asd < 0; asd++) {
+      auto start = std::chrono::high_resolution_clock::now();
+      gfx.render(&cube, &test_image);
+      auto elapsed = std::chrono::high_resolution_clock::now() - start;
+      long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+      std::cout << microseconds << "\n";
+      filea << microseconds << '\n';
+    }
+    filea.close();
+  } else
+    std::cout << "Unable to open file";
   std::ofstream file("data.txt", std::ios::out | std::ios::binary);
   if (file.is_open()) {
-    for (int asd = 0; asd < 100; asd++) {
+    for (int asd = 0; asd < 1; asd++) {
       auto start = std::chrono::high_resolution_clock::now();
       gfx.render(&cube, &test_image);
       auto elapsed = std::chrono::high_resolution_clock::now() - start;

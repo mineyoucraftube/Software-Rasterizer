@@ -39,10 +39,10 @@ int output::output_image(Image* image, int frame_num) {
   for (int i = 0; i < image->y; i++) {
     for (int j = 0; j < image->x; j++) {
       k = (i * image->x) + j;
-      pixel* pix = &image->pixels[j][i];
-      image_buffer[0x36 + (k * 4) + 0] = (pix->b) * 255;
-      image_buffer[0x36 + (k * 4) + 1] = (pix->g) * 255;
-      image_buffer[0x36 + (k * 4) + 2] = (pix->r) * 255;
+      float3* pix = &image->pixels[j][i];
+      image_buffer[0x36 + (k * 4) + 0] = (pix->x) * 255;
+      image_buffer[0x36 + (k * 4) + 1] = (pix->y) * 255;
+      image_buffer[0x36 + (k * 4) + 2] = (pix->z) * 255;
       image_buffer[0x36 + (k * 4) + 3] = 0;
     }
   }

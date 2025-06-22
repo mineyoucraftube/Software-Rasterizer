@@ -60,4 +60,7 @@ run:
 clean:
 	rm -f $(OBJ)
 
+rmbuild:
+	mv $(BUILD_DIR) oops_build
+
 .INTERMEDIATE: $(OBJ)

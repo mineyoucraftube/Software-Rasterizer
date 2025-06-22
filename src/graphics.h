@@ -33,18 +33,11 @@ struct simple_object {
     tri = new triangle[num_triangle];
   }
 };
-struct pixel {
-  float r;
-  float g;
-  float b;
-  pixel() {}
-  pixel(float3 a) : r(a.x), g(a.y), b(a.z) {}
-};
 
 struct Image {
   int x = 1024;
   int y = 1024;
-  pixel pixels[1024][1024];
+  float3 pixels[1024][1024];
 };
 
 class graphics {
