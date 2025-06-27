@@ -2,6 +2,7 @@
 #include <cstddef>
 #include "math.h"
 #include "typedef.h"
+#include "number.h"
 
 struct triangle3 {
   float3 a;

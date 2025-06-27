@@ -268,7 +268,7 @@ simple_object objparser::rawObjToSimpleObj(obj_object rawobj) {
       simobj.tri[i].uv.a = rawobj.uvs[rawobj.faces[i]->uvi[0]];
       simobj.tri[i].uv.b = rawobj.uvs[rawobj.faces[i]->uvi[1]];
       simobj.tri[i].uv.c = rawobj.uvs[rawobj.faces[i]->uvi[2]];
-      simobj.tri[i].color = randcoloring[i];
+      simobj.tri[i].color = number::randcoloring[i];
 
     } else {
       std::cout << "how did you get here? i ALREADY checked that your faces were all 3 verticies";  // no, seriously, how?

@@ -43,11 +43,36 @@ int output::output_image(Image* image, int frame_num) {
       image_buffer[0x36 + (k * 4) + 0] = (pix->x) * 255;
       image_buffer[0x36 + (k * 4) + 1] = (pix->y) * 255;
       image_buffer[0x36 + (k * 4) + 2] = (pix->z) * 255;
-      image_buffer[0x36 + (k * 4) + 3] = 0;
+      image_buffer[0x36 + (k * 4) + 3] = 255;
+      std::cout << ", " << (int)image_buffer[0x36 + (k * 4) + 0] << ", " << (int)image_buffer[0x36 + (k * 4) + 1] << ", " << (int)image_buffer[0x36 + (k * 4) + 2] << ", " << (int)image_buffer[0x36 + (k * 4) + 3];
     }
   }
+  char imagename[30] = "build/images/test";
+  int imagenameindex = 17;
 
-  std::ofstream file("test.bmp", std::ios::out | std::ios::binary);
+  if(frame_num<10){
+    imagename[imagenameindex+0] = frame_num + '0';
+    imagename[imagenameindex+1] = '.';
+    imagename[imagenameindex+2] = 'b';
+    imagename[imagenameindex+3] = 'm';
+    imagename[imagenameindex+4] = 'p';
+  }else if(frame_num<100){
+    imagename[imagenameindex+0] = (frame_num/10) + '0';
+    imagename[imagenameindex+1] = (frame_num%10) + '0';
+    imagename[imagenameindex+2] = '.';
+    imagename[imagenameindex+3] = 'b';
+    imagename[imagenameindex+4] = 'm';
+    imagename[imagenameindex+5] = 'p';
+  }else if(frame_num<1000){
+    imagename[imagenameindex+0] = (frame_num/100) + '0';
+    imagename[imagenameindex+1] = ((frame_num/10)%10) + '0';
+    imagename[imagenameindex+2] = (frame_num%10) + '0';
+    imagename[imagenameindex+3] = '.';
+    imagename[imagenameindex+4] = 'b';
+    imagename[imagenameindex+5] = 'm';
+    imagename[imagenameindex+6] = 'p';
+  }
+  std::ofstream file(imagename, std::ios::out | std::ios::binary);
   if (file.is_open()) {
     file.write((char*)image_buffer, 54 + (image->x * image->y * 4));
     file.close();

@@ -23,31 +23,34 @@ bool graphics::PointInTriangle(triangle2 trig, float2 p) {
   return PointOnRightSideOfLine(trig.a, trig.b, p) == bc && bc == PointOnRightSideOfLine(trig.c, trig.a, p);
 }
 
+float2 VertexToScreen(float3 a, int x = 1024, int y = 1024) {
+  float screenHeight_world = 2;
+  float pixelsPerWorldUnit = y / screenHeight_world;
+
+  float2 pixelOffset = float2(a.x, a.y) * pixelsPerWorldUnit;
+  return float2(x, y) / 2 + pixelOffset;
+
+  // return float2(x, y) / 2 + (float2(a.x, a.y) * (y / 6.0f));              // 25153
+  // return ((float2(x, y) * 3) + (float2(a.x, a.y) * y)) / 6;               // 25618
+  // return float2(x / 2 + (a.x * (y / 6.0f)), y / 2 + (a.y * (y / 6.0f)));  // 24980
+  // return float2(((x * 3) + (a.x * y)) / 6, ((y * 3) + (a.y * y)) / 6);    // 25198
+
+  // return float2(x, y) / 2 + float2(a.x, a.y) * y / 6;           // 25230
+  // return (float2(x, y) * 3 + float2(a.x, a.y) * y) / 6;         // 25130
+  // return float2(x / 2 + a.x * y / 6, y / 2 + a.y * y / 6);      // 25089
+  // return float2((x * 3 + a.x * y) / 6, (y * 3 + a.y * y) / 6);  // 25276
+
+  //    ////  return float2(x / 2 + (a.x * (y / 6.0f)), y / 2 + (a.y * (y / 6.0f)));  // 24980
+  // return float2(x / 2 + a.x * y / 6, y / 2 + a.y * y / 6);              // 25089
+  // return (float2(x, y) * 3 + float2(a.x, a.y) * y) / 6;                 // 25130
+  // return float2(x, y) / 2 + (float2(a.x, a.y) * (y / 6.0f));            // 25153
+  // return float2(((x * 3) + (a.x * y)) / 6, ((y * 3) + (a.y * y)) / 6);  // 25198
+  // return float2(x, y) / 2 + float2(a.x, a.y) * y / 6;                   // 25230
+  // return float2((x * 3 + a.x * y) / 6, (y * 3 + a.y * y) / 6);          // 25276
+  // return ((float2(x, y) * 3) + (float2(a.x, a.y) * y)) / 6;             // 25618
+}
 float2 graphics::WorldToScreen(float3 a, int x = 1024, int y = 1024) {
-  /*  float screenHeight_world = 6;
-    float pixelsPerWorldUnit = y / screenHeight_world;
-
-    float2 pixelOffset = float2(a.x, a.y) * pixelsPerWorldUnit;
-    return float2(x, y) / 2 + pixelOffset;
-
-  return float2(x, y) / 2 + (float2(a.x, a.y) * (y / 6.0f));              // 25153
-  return ((float2(x, y) * 3) + (float2(a.x, a.y) * y)) / 6;               // 25618
-  return float2(x / 2 + (a.x * (y / 6.0f)), y / 2 + (a.y * (y / 6.0f)));  // 24980
-  return float2(((x * 3) + (a.x * y)) / 6, ((y * 3) + (a.y * y)) / 6);    // 25198
-
-  return float2(x, y) / 2 + float2(a.x, a.y) * y / 6;           // 25230
-  return (float2(x, y) * 3 + float2(a.x, a.y) * y) / 6;         // 25130
-  return float2(x / 2 + a.x * y / 6, y / 2 + a.y * y / 6);      // 25089
-  return float2((x * 3 + a.x * y) / 6, (y * 3 + a.y * y) / 6);  // 25276*/
-
-  return float2(x / 2 + (a.x * (y / 6.0f)), y / 2 + (a.y * (y / 6.0f)));  // 24980
-  /*  return float2(x / 2 + a.x * y / 6, y / 2 + a.y * y / 6);                // 25089
-    return (float2(x, y) * 3 + float2(a.x, a.y) * y) / 6;                   // 25130
-    return float2(x, y) / 2 + (float2(a.x, a.y) * (y / 6.0f));              // 25153
-    return float2(((x * 3) + (a.x * y)) / 6, ((y * 3) + (a.y * y)) / 6);    // 25198
-    return float2(x, y) / 2 + float2(a.x, a.y) * y / 6;                     // 25230
-    return float2((x * 3 + a.x * y) / 6, (y * 3 + a.y * y) / 6);            // 25276
-    return ((float2(x, y) * 3) + (float2(a.x, a.y) * y)) / 6;               // 25618*/
+  return VertexToScreen(a, x, y);
 }
 
 void graphics::render(simple_object* cube, Image* image) {
@@ -76,7 +79,7 @@ void graphics::render(simple_object* cube, Image* image) {
           // image->pixels[j][k].x = curtri.color.x;
           // image->pixels[j][k].y = curtri.color.y;
           // image->pixels[j][k].z = curtri.color.z;
-          image->pixels[j][k] = (curtri.color * math::max(0, curtri.n.y+1)/2);// + (curtri.color * 0.2);
+          image->pixels[j][k] = (number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
         }
       }
     }
