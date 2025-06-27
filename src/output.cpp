@@ -44,7 +44,7 @@ int output::output_image(Image* image, int frame_num) {
       image_buffer[0x36 + (k * 4) + 1] = (pix->y) * 255;
       image_buffer[0x36 + (k * 4) + 2] = (pix->z) * 255;
       image_buffer[0x36 + (k * 4) + 3] = 255;
-      std::cout << ", " << (int)image_buffer[0x36 + (k * 4) + 0] << ", " << (int)image_buffer[0x36 + (k * 4) + 1] << ", " << (int)image_buffer[0x36 + (k * 4) + 2] << ", " << (int)image_buffer[0x36 + (k * 4) + 3];
+      //std::cout << ", " << (int)image_buffer[0x36 + (k * 4) + 0] << ", " << (int)image_buffer[0x36 + (k * 4) + 1] << ", " << (int)image_buffer[0x36 + (k * 4) + 2] << ", " << (int)image_buffer[0x36 + (k * 4) + 3];
     }
   }
   char imagename[30] = "build/images/test";
