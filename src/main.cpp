@@ -115,7 +115,7 @@ int main() {
     speeds.tri[i].v.c = (number::randcoloring[i * 3 + 2 + 100] * 2 - 1) / 10;
   }
   // output_obj_model(testing);
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 100; i++) {
     for (int j = 0; j < triangles.num_triangle; j++) {
       triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
       triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
@@ -145,7 +145,7 @@ int main() {
       }
     }
     start_timer();
-    gfx.render(&cube, &test_image);
+    gfx.render(&triangles, &test_image);
     print_timer();
     out.output_image(&test_image, i);
   }
