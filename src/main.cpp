@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include "OGLwindow.h"
 #include "graphics.h"
 #include "math.h"
 #include "number.h"
@@ -10,8 +11,7 @@
 output out;
 graphics gfx;
 objparser obp;
-
-
+OGLwindow window(1024, 1024);
 
 std::chrono::_V2::system_clock::time_point start;
 void start_timer() {
@@ -84,21 +84,19 @@ void print_simple_model_info(simple_object model) {
     std::cout << model.tri[i].v.c.y << "  \t ";
     std::cout << model.tri[i].v.c.z << "\n";
   }
-    /*
-    cube.tri[0].v.a = float3(-0.8899375528192, -0.1466161955218, 1);
-    cube.tri[0].v.b = float3(0.3541993807693, 0.4946349993233, 1);
-    cube.tri[0].v.c = float3(-0.2596479168603, -0.5193091976541, 1);
+  /*
+  cube.tri[0].v.a = float3(-0.8899375528192, -0.1466161955218, 1);
+  cube.tri[0].v.b = float3(0.3541993807693, 0.4946349993233, 1);
+  cube.tri[0].v.c = float3(-0.2596479168603, -0.5193091976541, 1);
 
-    cube.tri[1].v.a = float3(-0.0404167391354, 0.6206929265151, 1);
-    cube.tri[1].v.b = float3(0.6446806912547, 0.2370383654967, 1);
-    cube.tri[1].v.c = float3(-0.4350328590401, 0.2425191449398, 1);
-  */
-
+  cube.tri[1].v.a = float3(-0.0404167391354, 0.6206929265151, 1);
+  cube.tri[1].v.b = float3(0.6446806912547, 0.2370383654967, 1);
+  cube.tri[1].v.c = float3(-0.4350328590401, 0.2425191449398, 1);
+*/
 }
 
 Image test_image;
 int main() {
-
   obj_object testing = obp.parse("models/suzanne3.obj");
   simple_object cube = obp.rawObjToSimpleObj(testing);
   simple_object triangles(50);
@@ -115,7 +113,8 @@ int main() {
     speeds.tri[i].v.c = (number::randcoloring[i * 3 + 2 + 100] * 2 - 1) / 10;
   }
   // output_obj_model(testing);
-  for (int i = 0; i < 100; i++) {
+  //  for (int i = 0; i < 100; i++) {
+  while (!window.shouldclose()) {
     for (int j = 0; j < triangles.num_triangle; j++) {
       triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
       triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
@@ -146,8 +145,9 @@ int main() {
     }
     start_timer();
     gfx.render(&triangles, &test_image);
+    window.display_image(&test_image);
     print_timer();
-    out.output_image(&test_image, i);
+    //out.output_image(&test_image, i);
   }
   return 0;
 }
