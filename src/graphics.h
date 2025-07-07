@@ -3,8 +3,8 @@
 #include "math.h"
 #include "typedef.h"
 #include "number.h"
-#define image_x 200
-#define image_y 150
+#define image_x 100
+#define image_y 75
 struct triangle3 {
   float3 a;
   float3 b;
