@@ -3,7 +3,8 @@
 #include "math.h"
 #include "typedef.h"
 #include "number.h"
-
+#define image_x 200
+#define image_y 150
 struct triangle3 {
   float3 a;
   float3 b;
@@ -36,9 +37,9 @@ struct simple_object {
 };
 
 struct Image {
-  int x = 1024;
-  int y = 1024;
-  float3 pixels[1024][1024];
+  int x = image_x;
+  int y = image_y;
+  float3 pixels[image_x][image_y];
 };
 
 class graphics {

@@ -40,7 +40,7 @@ float2 VertexToScreen(float3 a, int x = 1024, int y = 1024) {
   // return float2(x / 2 + a.x * y / 6, y / 2 + a.y * y / 6);      // 25089
   // return float2((x * 3 + a.x * y) / 6, (y * 3 + a.y * y) / 6);  // 25276
 
-    return float2(x / 2 + (a.x * (y / 6.0f)), y / 2 + (a.y * (y / 6.0f)));  // 24980
+    return float2(x / 2 + (a.x * (y / 3.0f)), y / 2 + (a.y * (y / 3.0f)));  // 24980
   // return float2(x / 2 + a.x * y / 6, y / 2 + a.y * y / 6);              // 25089
   // return (float2(x, y) * 3 + float2(a.x, a.y) * y) / 6;                 // 25130
   // return float2(x, y) / 2 + (float2(a.x, a.y) * (y / 6.0f));            // 25153

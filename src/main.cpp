@@ -114,7 +114,7 @@ int main() {
   }
   // output_obj_model(testing);
   //  for (int i = 0; i < 100; i++) {
-  while (!window.shouldclose()) {
+//  while (!window.shouldclose()) {
     for (int j = 0; j < triangles.num_triangle; j++) {
       triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
       triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
@@ -144,10 +144,10 @@ int main() {
       }
     }
     start_timer();
-    gfx.render(&triangles, &test_image);
+    gfx.render(&cube, &test_image);
     window.display_image(&test_image);
     print_timer();
-    //out.output_image(&test_image, i);
-  }
+    out.output_image(&test_image, 0);
+//  }
   return 0;
 }
