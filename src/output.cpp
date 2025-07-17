@@ -61,7 +61,7 @@ int output::output_image(Image* image, int frame_num) {
       image_buffer[0x36 + (k * 4) + 3] = 255;
       char hexint[3];
       inttohex((int)image_buffer[0x36 + (k * 4) + 0], hexint);
-      std::cout << "\n" << hexint;//(int)index++ << " " << hexint;  // << "\n" << (int)index++ << " " << (int)image_buffer[0x36 + (k * 4) + 1] << "\n" << (int)index++ << " " << (int)image_buffer[0x36 + (k * 4) + 2];
+      //std::cout << "\n" << hexint;//(int)index++ << " " << hexint;  // << "\n" << (int)index++ << " " << (int)image_buffer[0x36 + (k * 4) + 1] << "\n" << (int)index++ << " " << (int)image_buffer[0x36 + (k * 4) + 2];
     }
   }
   //  for(;index<524287;index++){
@@ -99,6 +99,20 @@ int output::output_image(Image* image, int frame_num) {
   } else
     std::cout << "Unable to open file";
   return 0;
+}
+
+void output::rgbf_rgba(Image* image, unsigned char* imga) {
+  int k;
+  for (int i = 0; i < image->y; i++) {
+    for (int j = 0; j < image->x; j++) {
+      k = (i * image->x) + j;
+      float3* pix = &image->pixels[j][i];
+      imga[(k * 4) + 0] = (pix->x) * 255;
+      imga[(k * 4) + 1] = (pix->y) * 255;
+      imga[(k * 4) + 2] = (pix->z) * 255;
+      imga[(k * 4) + 3] = 255;
+    }
+  }
 }
 
 // reading an entire binary file

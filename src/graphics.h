@@ -1,10 +1,12 @@
 #pragma once
 #include <cstddef>
+#include <iostream>
 #include "math.h"
 #include "typedef.h"
 #include "number.h"
-#define image_x 100
-#define image_y 75
+#include "transform.h"
+#define image_x 1024
+#define image_y 1024
 struct triangle3 {
   float3 a;
   float3 b;
@@ -51,5 +53,5 @@ class graphics {
   bool PointInTriangle(triangle2 trig, float2 p);
   float2 WorldToScreen(float3 a, int x, int y);
 
-  void render(simple_object* cube, Image* image);
+  void render(simple_object* cube, Image* image, Image* image2);
 };

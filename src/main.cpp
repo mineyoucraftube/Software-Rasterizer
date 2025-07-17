@@ -12,13 +12,14 @@ output out;
 graphics gfx;
 objparser obp;
 OGLwindow window(1024, 1024);
+OGLwindow window2(1024, 1024);
 
 std::chrono::_V2::system_clock::time_point start;
 void start_timer() {
   start = std::chrono::high_resolution_clock::now();
 }
 void print_timer() {
-  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count() << "\n";
+  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count() << "        ";
 }
 void print_obj_model_info(obj_object model) {
   std::cout << "num_vertice: " << model.num_vertice << '\n';
@@ -95,7 +96,10 @@ void print_simple_model_info(simple_object model) {
 */
 }
 
-Image test_image;
+unsigned char imga[1024*1024*4];
+unsigned char imga2[1024*1024*4];
+
+Image test_image, anothertest;
 int main() {
   obj_object testing = obp.parse("models/suzanne3.obj");
   simple_object cube = obp.rawObjToSimpleObj(testing);
@@ -106,7 +110,7 @@ int main() {
     triangles.tri[i].v.b = number::randcoloring[i * 3 + 1] * 2 - 1;
     triangles.tri[i].v.c = number::randcoloring[i * 3 + 2] * 2 - 1;
   }
-  simple_object speeds(50);
+  simple_object speeds(triangles.num_triangle);
   for (int i = 0; i < speeds.num_triangle; i++) {
     speeds.tri[i].v.a = (number::randcoloring[i * 3 + 0 + 100] * 2 - 1) / 10;
     speeds.tri[i].v.b = (number::randcoloring[i * 3 + 1 + 100] * 2 - 1) / 10;
@@ -114,7 +118,7 @@ int main() {
   }
   // output_obj_model(testing);
   //  for (int i = 0; i < 100; i++) {
-//  while (!window.shouldclose()) {
+  while (!window.shouldclose()) {
     for (int j = 0; j < triangles.num_triangle; j++) {
       triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
       triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
@@ -140,14 +144,31 @@ int main() {
     }
     for (int i = 0; i < test_image.x; i++) {
       for (int j = 0; j < test_image.y; j++) {
-        test_image.pixels[i][j] = 0;
+        test_image.pixels[i][j] = 0.1;
+      }
+    }
+    for (int i = 0; i < anothertest.x; i++) {
+      for (int j = 0; j < anothertest.y; j++) {
+        anothertest.pixels[i][j] = 0.1;
       }
     }
     start_timer();
-    gfx.render(&cube, &test_image);
-    window.display_image(&test_image);
+    gfx.render(&cube, &test_image, &anothertest);
     print_timer();
-    out.output_image(&test_image, 0);
-//  }
+    start_timer();
+    out.rgbf_rgba(&test_image, imga);
+    out.rgbf_rgba(&anothertest, imga2);
+    print_timer();
+    start_timer();
+    window.display_image(imga, &test_image);
+    window2.display_image(imga2, &anothertest);
+    print_timer();
+    start_timer();
+    //out.output_image(&test_image, 0);
+    print_timer();
+    std::cout << '\n';
+  }
+  window.~OGLwindow();
+  window2.~OGLwindow();
   return 0;
 }

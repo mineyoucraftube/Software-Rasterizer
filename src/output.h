@@ -14,4 +14,5 @@ class output {
 
  public:
   int output_image(Image* image, int frame_num);
+  void rgbf_rgba(Image* image, unsigned char* imga);
 };

@@ -1,5 +1,6 @@
 #pragma once
-
+#include <math.h>
+#include <algorithm>
 #define mmin(a, b) ((a) < (b) ? (a) : (b))
 #define mmax(a, b) ((a) > (b) ? (a) : (b))
 #define mmap(x, in_min, in_max, out_min, out_max) (float(((x) - (in_min)) * ((out_max) - (out_min))) / ((in_max) - (in_min)) + (out_min))
@@ -47,6 +48,9 @@ struct float3 {
 
   float3 operator*(const float3& a) {
     return float3(x * a.x, y * a.y, z * a.z);
+  }
+  float3 operator*(const float& a) {
+    return float3(x * a, y * a, z * a);
   }
 
   float3 operator/(const float3& a) {
