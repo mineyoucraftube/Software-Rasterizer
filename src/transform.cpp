@@ -1,19 +1,35 @@
 #include "transform.h"
 
-
-void getbasisvectors(float3* ihat, float3* jhat, float3* khat, float yaw){
-  *ihat = float3(cos(yaw), 0, -sin(yaw));
-  *jhat = float3(0, 1, 0);
-  *khat = float3(sin(yaw), 0, cos(yaw));
-}
-
 float3 transformvector(float3 ihat, float3 jhat, float3 khat, float3 v){
   return (ihat * v.x) + (jhat * v.y) + (khat * v.z);
 }
 
+void getbasisvectors(float3* ihat, float3* jhat, float3* khat, float yaw, float pitch, float roll){
+  float3 ihaty = float3(cos(yaw) , 0        , -sin(yaw));
+  float3 jhaty = float3(0        , 1        , 0        );
+  float3 khaty = float3(sin(yaw) , 0        , cos(yaw) );
+
+  float3 ihatp = float3(1          , 0          , 0          );
+  float3 jhatp = float3(0          , cos(pitch) , -sin(pitch));
+  float3 khatp = float3(0          , sin(pitch) , cos(pitch) );
+  
+  float3 ihatr = float3(cos(roll) , -sin(roll), 0         );
+  float3 jhatr = float3(sin(roll) , cos(roll) , 0         );
+  float3 khatr = float3(0         , 0         , 1         );
+  
+  float3 ihatyp = transformvector(ihaty, jhaty, khaty, ihatp);
+  float3 jhatyp = transformvector(ihaty, jhaty, khaty, jhatp);
+  float3 khatyp = transformvector(ihaty, jhaty, khaty, khatp);
+
+  *ihat = transformvector(ihatyp, jhatyp, khatyp, ihatr);
+  *jhat = transformvector(ihatyp, jhatyp, khatyp, jhatr);
+  *khat = transformvector(ihatyp, jhatyp, khatyp, khatr);
+}
+
+
 float3 transform::toworldpoint(float3 p, float yaw) {
   float3 ihat, jhat, khat;
-  getbasisvectors(&ihat, &jhat, &khat, yaw);
+  getbasisvectors(&ihat, &jhat, &khat, yaw, yaw, yaw);
   return transformvector(ihat, jhat, khat, p);
 }
 

@@ -98,7 +98,7 @@ void print_simple_model_info(simple_object model) {
 
 unsigned char imga[1024*1024*4];
 unsigned char imga2[1024*1024*4];
-
+int fram = 0;
 Image test_image, anothertest;
 int main() {
   obj_object testing = obp.parse("models/suzanne3.obj");
@@ -164,7 +164,7 @@ int main() {
     window2.display_image(imga2, &anothertest);
     print_timer();
     start_timer();
-    //out.output_image(&test_image, 0);
+    //out.output_image(&test_image, fram++); // this will put the frames in build/images 
     print_timer();
     std::cout << '\n';
   }

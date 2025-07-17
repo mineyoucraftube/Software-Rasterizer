@@ -56,13 +56,13 @@ triangle yaw_trig(triangle trig, float yaw){
   triangle *temptrig;
   temptrig = new triangle;
 
-  //temptrig->v.a = transform::toworldpoint(trig.v.a, yaw);
-  //temptrig->v.b = transform::toworldpoint(trig.v.b, yaw);
-  //temptrig->v.c = transform::toworldpoint(trig.v.c, yaw);
-  //temptrig->n = transform::toworldpoint(trig.n, yaw);
+  temptrig->v.a = transform::toworldpoint(trig.v.a, yaw);
+  temptrig->v.b = transform::toworldpoint(trig.v.b, yaw);
+  temptrig->v.c = transform::toworldpoint(trig.v.c, yaw);
+  temptrig->n = transform::toworldpoint(trig.n, yaw);
 
 
-/**/
+/*
   temptrig->v.a.x = trig.v.a.x * cos(yaw)   + trig.v.a.y * 0    + trig.v.a.z * sin(yaw) ;
   temptrig->v.a.y = trig.v.a.x * 0          + trig.v.a.y * 1    + trig.v.a.z * 0        ;
   temptrig->v.a.z = trig.v.a.x * -sin(yaw)  + trig.v.a.y * 0    + trig.v.a.z * cos(yaw) ;
@@ -96,8 +96,6 @@ void graphics::render(simple_object* cube, Image* image, Image* image2) {
     }
   }
 
-  yyy+= 0.05f;
-  if(yyy > 2*3.141592654) yyy -= 2*3.141592654;
   for (int i = 0; i < cube->num_triangle; i++) {
     //curtri = cube->tri[i];
     curtri = yaw_trig(cube->tri[i], yyy);
@@ -136,4 +134,7 @@ void graphics::render(simple_object* cube, Image* image, Image* image2) {
       }
     }
   }
+    yyy+= 2*3.141592654/100;
+  if(yyy > 2*3.141592654) yyy -= 2*3.141592654;
+
 }
