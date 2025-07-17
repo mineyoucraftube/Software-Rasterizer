@@ -377,6 +377,17 @@ void OGLwindow::display_image(unsigned char* image, Image* imgaaa) {
     // print_timer();
     */
 }
+float rotspeed = 2*3.141592654/50;
+float3 OGLwindow::getinputs() {
+  float3 ins = 0;
+  ins.x += glfwGetKey(window, GLFW_KEY_W)*rotspeed;
+  ins.x -= glfwGetKey(window, GLFW_KEY_S)*rotspeed;
+  ins.y += glfwGetKey(window, GLFW_KEY_E)*rotspeed;
+  ins.y -= glfwGetKey(window, GLFW_KEY_Q)*rotspeed;
+  ins.z += glfwGetKey(window, GLFW_KEY_D)*rotspeed;
+  ins.z -= glfwGetKey(window, GLFW_KEY_A)*rotspeed;
+  return ins;
+}
 
 int OGLwindow::shouldclose() {
   return glfwWindowShouldClose(window);
@@ -384,7 +395,6 @@ int OGLwindow::shouldclose() {
 
 OGLwindow::~OGLwindow() {
     glfwMakeContextCurrent(window);
-
   glDeleteVertexArrays(1, &VAO);  // Delete all the objects we've created
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);

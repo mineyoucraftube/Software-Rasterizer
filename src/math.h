@@ -42,6 +42,10 @@ struct float3 {
     return float3(x + a.x, y + a.y, z + a.z);
   }
 
+  float3 operator+=(const float3& a) {
+    return float3(x += a.x, y += a.y, z += a.z);
+  }
+
   float3 operator-(const float3& a) {
     return float3(x - a.x, y - a.y, z - a.z);
   }

@@ -52,14 +52,14 @@ float2 graphics::WorldToScreen(float3 a, int x = 1024, int y = 1024) {
   return VertexToScreen(a, x, y);
 }
 
-triangle yaw_trig(triangle trig, float yaw){
+triangle yaw_trig(triangle trig, float3 rot){
   triangle *temptrig;
   temptrig = new triangle;
 
-  temptrig->v.a = transform::toworldpoint(trig.v.a, yaw);
-  temptrig->v.b = transform::toworldpoint(trig.v.b, yaw);
-  temptrig->v.c = transform::toworldpoint(trig.v.c, yaw);
-  temptrig->n = transform::toworldpoint(trig.n, yaw);
+  temptrig->v.a = transform::toworldpoint(trig.v.a, rot);
+  temptrig->v.b = transform::toworldpoint(trig.v.b, rot);
+  temptrig->v.c = transform::toworldpoint(trig.v.c, rot);
+  temptrig->n = transform::toworldpoint(trig.n, rot);
 
 
 /*
@@ -86,7 +86,7 @@ triangle yaw_trig(triangle trig, float yaw){
 
 Image zbuf;
 float yyy = 0;
-void graphics::render(simple_object* cube, Image* image, Image* image2) {
+void graphics::render(simple_object* cube, Image* image, float3 rot) {//, Image* image2) {
   float screenposFx;
   float screenposFy;
   triangle curtri;
@@ -98,7 +98,7 @@ void graphics::render(simple_object* cube, Image* image, Image* image2) {
 
   for (int i = 0; i < cube->num_triangle; i++) {
     //curtri = cube->tri[i];
-    curtri = yaw_trig(cube->tri[i], yyy);
+    curtri = yaw_trig(cube->tri[i], rot);
     if (curtri.n.z > 0) {
       triangle2 trig;
 
@@ -106,17 +106,17 @@ void graphics::render(simple_object* cube, Image* image, Image* image2) {
       trig.b = WorldToScreen(curtri.v.b, image->x, image->y);
       trig.c = WorldToScreen(curtri.v.c, image->x, image->y);
 
-      float iminx = math::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0, image->x);
-      float iminy = math::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0, image->y);
+      //float iminx = math::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0, image->x);
+      //float iminy = math::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0, image->y);
 
-      float imaxx = math::clamp(mmax(mmax(trig.a.x, trig.b.x), trig.c.x), 0, image->x);
-      float imaxy = math::clamp(mmax(mmax(trig.a.y, trig.b.y), trig.c.y), 0, image->y);
+      //float imaxx = math::clamp(mmax(mmax(trig.a.x, trig.b.x), trig.c.x), 0, image->x);
+      //float imaxy = math::clamp(mmax(mmax(trig.a.y, trig.b.y), trig.c.y), 0, image->y);
 
-      //int iminx = std::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x);
-      //int iminy = std::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y);
+      int iminx = std::clamp(std::min(std::min(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x);
+      int iminy = std::clamp(std::min(std::min(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y);
 
-      //int imaxx = std::clamp(mmax(mmax(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x)+1;
-      //int imaxy = std::clamp(mmax(mmax(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y)+1;
+      int imaxx = std::clamp(std::max(std::max(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x)+1;
+      int imaxy = std::clamp(std::max(std::max(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y)+1;
 
       for (int j = iminx; j < imaxx; j++) {
         for (int k = iminy; k < imaxy; k++) {
@@ -129,7 +129,7 @@ void graphics::render(simple_object* cube, Image* image, Image* image2) {
           // image->pixels[j][k].y = curtri.color.y;
           // image->pixels[j][k].z = curtri.color.z;
           image->pixels[j][k] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+          //image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
         }
       }
     }

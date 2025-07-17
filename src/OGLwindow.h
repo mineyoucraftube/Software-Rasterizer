@@ -46,6 +46,7 @@ class OGLwindow {
  public:
   OGLwindow(int x, int y);
   void display_image(unsigned char* image, Image* imgaaa);
+  float3 getinputs();
   int shouldclose();
   ~OGLwindow();
 };
