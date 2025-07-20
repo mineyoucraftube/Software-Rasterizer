@@ -210,7 +210,6 @@ obj_object objparser::parse(const char* filename) {
 
   obj_object object = get_obj_params(file, index.file_size);
   for (; index.file_index < index.file_size;) {
-        std::cout << "what the fuckparse " << index.file_index << '\n';
 
     // std::cout << "parse:\n";
     parseline(file, object, &index);

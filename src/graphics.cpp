@@ -86,7 +86,7 @@ triangle yaw_trig(triangle trig, float3 rot){
 
 Image zbuf;
 float yyy = 0;
-void graphics::render(simple_object* cube, Image* image, float3 rot, Image* image2) {
+void graphics::render(simple_object* cube, Image* image){//, float3 rot, Image* image2) {
   float screenposFx;
   float screenposFy;
   triangle curtri;
@@ -97,11 +97,11 @@ void graphics::render(simple_object* cube, Image* image, float3 rot, Image* imag
   }
 
   for (int i = 0; i < cube->num_triangle; i++) {
-    //curtri = cube->tri[i];
-    rot.x = 0;
-    rot.y = yyy;
-    rot.z = 0;
-    curtri = yaw_trig(cube->tri[i], rot);
+    curtri = cube->tri[i];
+    //rot.x = 0;
+    //rot.y = yyy;
+    //rot.z = 0;
+    //curtri = yaw_trig(cube->tri[i], rot);
     if (curtri.n.z > 0) {
       triangle2 trig;
 
@@ -132,7 +132,7 @@ void graphics::render(simple_object* cube, Image* image, float3 rot, Image* imag
           // image->pixels[j][k].y = curtri.color.y;
           // image->pixels[j][k].z = curtri.color.z;
           image->pixels[j][k] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+          //image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
         }
       }
     }
