@@ -55,6 +55,7 @@ int output::output_image(Image* image, int frame_num) {
     for (int j = 0; j < image->x; j++) {
       k = (i * image->x) + j;
       float3* pix = &image->pixels[(j*image->y)+i];
+      //float3* pix = &image->pixels[j][i];
       image_buffer[0x36 + (k * 4) + 0] = (pix->x) * 255;
       image_buffer[0x36 + (k * 4) + 1] = (pix->y) * 255;
       image_buffer[0x36 + (k * 4) + 2] = (pix->z) * 255;
@@ -107,6 +108,7 @@ void output::rgbf_rgba(Image* image, unsigned char* imga) {
     for (int j = 0; j < image->x; j++) {
       k = (i * image->x) + j;
       float3* pix = &image->pixels[(j*image->y)+i];
+      //float3* pix = &image->pixels[j][i];
       imga[(k * 4) + 0] = (pix->x) * 255;
       imga[(k * 4) + 1] = (pix->y) * 255;
       imga[(k * 4) + 2] = (pix->z) * 255;

@@ -42,6 +42,7 @@ struct Image {
   int x = image_x;
   int y = image_y;
   float3 pixels[image_x*image_y];
+  //float3 pixels[image_x][image_y];
 };
 
 class graphics {
