@@ -53,5 +53,5 @@ class graphics {
   bool PointInTriangle(triangle2 trig, float2 p);
   float2 WorldToScreen(float3 a, int x, int y);
 
-  void render(simple_object* cube, Image* image, float3 rot);//, Image* image2);
+  void render(simple_object* cube, Image* image, float3 rot, Image* image2);
 };

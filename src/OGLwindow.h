@@ -44,6 +44,7 @@ class OGLwindow {
       "}\n\0";*/
 
  public:
+  struct properties;
   OGLwindow(int x, int y);
   void display_image(unsigned char* image, Image* imgaaa);
   float3 getinputs();

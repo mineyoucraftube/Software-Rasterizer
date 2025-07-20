@@ -73,7 +73,8 @@ float objparser::parsefloat(char* file, indexing* index) {
         }
     }
     if ((index->file_index + 1) < index->file_size) {
-      // std::cout << file[index->file_index];
+      //std::cout << file[index->file_index];
+
       index->file_index++;
     }
   }
@@ -100,7 +101,7 @@ int objparser::parseint(char* file, indexing* index) {
         }
     }
     if ((index->file_index + 1) < index->file_size) {
-      // std::cout << file[index->file_index];
+      //std::cout << file[index->file_index];
       index->file_index++;
     }
   }
@@ -127,15 +128,20 @@ void objparser::parseUV(char* file, obj_object object, indexing* index) {
   if ((index->t + 1) < object.num_uv)
     index->t++;
 }
+bool isnewline(char* file, indexing* index){
+  return (file[index->file_index] == '\n') || (file[index->file_index] == '\r');
+}
 void objparser::parseface(char* file, obj_object object, indexing* index) {
   const size_t backup_index = index->file_index;
   int vertnumber = 0;
-  while ((file[index->file_index] != '\n') && (index->file_index < index->file_size)) {
+  while (!isnewline(file, index) && (index->file_index < index->file_size)) {
+    //std::cout << file[index->file_index];
     parseint(file, index);
     parseint(file, index);
     parseint(file, index);
     vertnumber++;
   }
+
   index->file_index = backup_index;
   if (vertnumber >= 3) {
     object.faces[index->f] = new face(vertnumber);
@@ -204,6 +210,8 @@ obj_object objparser::parse(const char* filename) {
 
   obj_object object = get_obj_params(file, index.file_size);
   for (; index.file_index < index.file_size;) {
+        std::cout << "what the fuckparse " << index.file_index << '\n';
+
     // std::cout << "parse:\n";
     parseline(file, object, &index);
     // std::cout << "\nskip:\n";

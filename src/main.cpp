@@ -14,7 +14,7 @@ objparser obp;
 OGLwindow window(1024, 1024);
 //OGLwindow window2(1024, 1024);
 
-std::chrono::_V2::system_clock::time_point start;
+std::chrono::steady_clock::time_point start;
 void start_timer() {
   start = std::chrono::high_resolution_clock::now();
 }
@@ -97,12 +97,13 @@ void print_simple_model_info(simple_object model) {
 }
 
 unsigned char imga[1024*1024*4];
-//unsigned char imga2[1024*1024*4];
+unsigned char imga2[1024*1024*4];
 int fram = 0;
 Image test_image, anothertest;
 float3 rotation = 0;
 int main() {
   obj_object testing = obp.parse("models/suzanne3.obj");
+  std::cout << "what the fuck\n";
   simple_object cube = obp.rawObjToSimpleObj(testing);
   simple_object triangles(50);
   for (int i = 0; i < triangles.num_triangle; i++) {
@@ -148,20 +149,20 @@ int main() {
         test_image.pixels[i][j] = 0.1;
       }
     }
-    //for (int i = 0; i < anothertest.x; i++) {
-    //  for (int j = 0; j < anothertest.y; j++) {
-    //    anothertest.pixels[i][j] = 0.1;
-    //  }
-    //}
+    for (int i = 0; i < anothertest.x; i++) {
+      for (int j = 0; j < anothertest.y; j++) {
+        anothertest.pixels[i][j] = 0.1;
+      }
+    }
     start_timer();
     rotation += window.getinputs();
     print_timer();
     start_timer();
-    gfx.render(&cube, &test_image, rotation);//, &anothertest);
+    gfx.render(&cube, &test_image, rotation, &anothertest);
     print_timer();
     start_timer();
     out.rgbf_rgba(&test_image, imga);
-    //out.rgbf_rgba(&anothertest, imga2);
+    out.rgbf_rgba(&anothertest, imga2);
     print_timer();
     start_timer();
     window.display_image(imga, &test_image);
