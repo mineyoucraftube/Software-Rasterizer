@@ -149,12 +149,12 @@ int main() {
       }
       for (int i = 0; i < test_image.x; i++) {
         for (int j = 0; j < test_image.y; j++) {
-          test_image.pixels[i][j] = 0.1;
+          test_image.pixels[(i*test_image.y)+j] = 0.1;
         }
       }
       for (int i = 0; i < anothertest.x; i++) {
         for (int j = 0; j < anothertest.y; j++) {
-          anothertest.pixels[i][j] = 0.1;
+          anothertest.pixels[(i*anothertest.y)+j] = 0.1;
         }
       }
       //    start_timer();

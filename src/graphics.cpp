@@ -92,7 +92,7 @@ void graphics::render(simple_object* cube, Image* image){//, float3 rot, Image* 
   triangle curtri;
   for (int i = 0; i < zbuf.x; i++) {
     for (int j = 0; j < zbuf.y; j++) {
-      zbuf.pixels[i][j] = float3(-100000000, -100000000, -100000000);
+      zbuf.pixels[(i*zbuf.y)+j] = float3(-100000000, -100000000, -100000000);
     }
   }
 
@@ -123,15 +123,15 @@ void graphics::render(simple_object* cube, Image* image){//, float3 rot, Image* 
 
       for (int j = iminx; j < imaxx; j++) {
         for (int k = iminy; k < imaxy; k++) {
-          if(!(zbuf.pixels[j][k].x < (curtri.v.a.z + curtri.v.b.z + curtri.v.c.z)))
+          if(!(zbuf.pixels[(j*zbuf.y)+k].x < (curtri.v.a.z + curtri.v.b.z + curtri.v.c.z)))
             continue;
           if (!PointInTriangle(trig, float2(j, k)))
             continue;
-          zbuf.pixels[j][k].x = curtri.v.a.z + curtri.v.b.z + curtri.v.c.z;
+          zbuf.pixels[(j*zbuf.y)+k].x = curtri.v.a.z + curtri.v.b.z + curtri.v.c.z;
           // image->pixels[j][k].x = curtri.color.x;
           // image->pixels[j][k].y = curtri.color.y;
           // image->pixels[j][k].z = curtri.color.z;
-          image->pixels[j][k] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+          image->pixels[(j*image->y)+k] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
           //image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
         }
       }
