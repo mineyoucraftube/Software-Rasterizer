@@ -3,5 +3,5 @@
 class transform {
  private:
  public:
- static float3 toworldpoint(float3 p, float yaw);
+ static float3 toworldpoint(float3 p, float3 rot);
 };

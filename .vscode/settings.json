@@ -110,6 +110,10 @@
     "iomanip": "cpp",
     "span": "cpp",
     "sstream": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "complex": "cpp",
+    "map": "cpp",
+    "cinttypes": "cpp",
+    "xiosbase": "cpp"
   }
 }

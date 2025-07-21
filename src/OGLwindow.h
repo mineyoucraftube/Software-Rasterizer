@@ -44,8 +44,10 @@ class OGLwindow {
       "}\n\0";*/
 
  public:
-  OGLwindow(int x, int y);
+  struct properties;
+  OGLwindow(int x, int y, const char* windowname);
   void display_image(unsigned char* image, Image* imgaaa);
+  float3 getinputs();
   int shouldclose();
   ~OGLwindow();
 };

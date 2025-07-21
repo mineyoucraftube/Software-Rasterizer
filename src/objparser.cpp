@@ -27,7 +27,8 @@ obj_object objparser::get_obj_params(char* file, size_t size) {
       case 'f':
         f++;
         break;
-
+      case 'r':
+        rewind_verts = 1;
       default:
         break;
     }
@@ -74,6 +75,7 @@ float objparser::parsefloat(char* file, indexing* index) {
     }
     if ((index->file_index + 1) < index->file_size) {
       // std::cout << file[index->file_index];
+
       index->file_index++;
     }
   }
@@ -127,22 +129,35 @@ void objparser::parseUV(char* file, obj_object object, indexing* index) {
   if ((index->t + 1) < object.num_uv)
     index->t++;
 }
+bool isnewline(char* file, indexing* index) {
+  return (file[index->file_index] == '\n') || (file[index->file_index] == '\r');
+}
 void objparser::parseface(char* file, obj_object object, indexing* index) {
   const size_t backup_index = index->file_index;
   int vertnumber = 0;
-  while ((file[index->file_index] != '\n') && (index->file_index < index->file_size)) {
+  while (!isnewline(file, index) && (index->file_index < index->file_size)) {
+    // std::cout << file[index->file_index];
     parseint(file, index);
     parseint(file, index);
     parseint(file, index);
     vertnumber++;
   }
+
   index->file_index = backup_index;
   if (vertnumber >= 3) {
     object.faces[index->f] = new face(vertnumber);
-    for (int i = 0; i < object.faces[index->f]->num_vert; i++) {
-      object.faces[index->f]->verti[i] = parseint(file, index) - 1;
-      object.faces[index->f]->uvi[i] = parseint(file, index) - 1;
-      object.faces[index->f]->normali[i] = parseint(file, index) - 1;
+    if (!rewind_verts) {
+      for (int i = 0; i < object.faces[index->f]->num_vert; i++) {
+        object.faces[index->f]->verti[i] = parseint(file, index) - 1;
+        object.faces[index->f]->uvi[i] = parseint(file, index) - 1;
+        object.faces[index->f]->normali[i] = parseint(file, index) - 1;
+      }
+    } else {
+      for (int i = object.faces[index->f]->num_vert-1; i >= 0; i--) {
+        object.faces[index->f]->verti[i] = parseint(file, index) - 1;
+        object.faces[index->f]->uvi[i] = parseint(file, index) - 1;
+        object.faces[index->f]->normali[i] = parseint(file, index) - 1;
+      }
     }
     if ((index->f + 1) < object.num_face)
       index->f++;

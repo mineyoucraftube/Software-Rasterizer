@@ -11,15 +11,18 @@
 output out;
 graphics gfx;
 objparser obp;
-OGLwindow window(1024, 1024);
-OGLwindow window2(1024, 1024);
+OGLwindow window(1024, 1024, "HI MOM 0");
+//OGLwindow window2(1024, 1024, "HI MOM 1");
+//OGLwindow window3(1024, 1024, "HI MOM 2");
 
-std::chrono::_V2::system_clock::time_point start;
+std::chrono::steady_clock::time_point start;
 void start_timer() {
   start = std::chrono::high_resolution_clock::now();
 }
-void print_timer() {
-  std::cout << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count() << "        ";
+void print_timer(std::fstream* file, int i) {
+  int a = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+  std::cout << i << "\t" << a << "\n";
+  *file << a << "\n";
 }
 void print_obj_model_info(obj_object model) {
   std::cout << "num_vertice: " << model.num_vertice << '\n';
@@ -97,9 +100,11 @@ void print_simple_model_info(simple_object model) {
 }
 
 unsigned char imga[1024*1024*4];
-unsigned char imga2[1024*1024*4];
+//unsigned char imga2[1024*1024*4];
+//unsigned char imga3[1024*1024*4];
 int fram = 0;
-Image test_image, anothertest;
+Image test_image, anothertest, test3;
+float3 rotation = 0;
 int main() {
   obj_object testing = obp.parse("models/suzanne3.obj");
   simple_object cube = obp.rawObjToSimpleObj(testing);
@@ -117,58 +122,74 @@ int main() {
     speeds.tri[i].v.c = (number::randcoloring[i * 3 + 2 + 100] * 2 - 1) / 10;
   }
   // output_obj_model(testing);
-  //  for (int i = 0; i < 100; i++) {
+  std::fstream file("times.txt", std::ios::out | std::ios::binary);
+  if (!file.is_open()) {return 1;}
+  //for (int i = 0; i < 1000; i++) {
   while (!window.shouldclose()) {
-    for (int j = 0; j < triangles.num_triangle; j++) {
-      triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
-      triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
-      triangles.tri[j].v.c = triangles.tri[j].v.c + speeds.tri[j].v.c;
-      if (triangles.tri[j].v.a.x < -1 || triangles.tri[j].v.a.x > 1)
+      for (int j = 0; j < triangles.num_triangle; j++) {
+        triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
+        triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
+        triangles.tri[j].v.c = triangles.tri[j].v.c + speeds.tri[j].v.c;
+        if (triangles.tri[j].v.a.x < -1 || triangles.tri[j].v.a.x > 1)
         speeds.tri[j].v.a.x = -speeds.tri[j].v.a.x;
-      if (triangles.tri[j].v.a.y < -1 || triangles.tri[j].v.a.y > 1)
+        if (triangles.tri[j].v.a.y < -1 || triangles.tri[j].v.a.y > 1)
         speeds.tri[j].v.a.y = -speeds.tri[j].v.a.y;
-      if (triangles.tri[j].v.a.z < -1 || triangles.tri[j].v.a.z > 1)
+        if (triangles.tri[j].v.a.z < -1 || triangles.tri[j].v.a.z > 1)
         speeds.tri[j].v.a.z = -speeds.tri[j].v.a.z;
-      if (triangles.tri[j].v.b.x < -1 || triangles.tri[j].v.b.x > 1)
+        if (triangles.tri[j].v.b.x < -1 || triangles.tri[j].v.b.x > 1)
         speeds.tri[j].v.b.x = -speeds.tri[j].v.b.x;
-      if (triangles.tri[j].v.b.y < -1 || triangles.tri[j].v.b.y > 1)
+        if (triangles.tri[j].v.b.y < -1 || triangles.tri[j].v.b.y > 1)
         speeds.tri[j].v.b.y = -speeds.tri[j].v.b.y;
-      if (triangles.tri[j].v.b.z < -1 || triangles.tri[j].v.b.z > 1)
+        if (triangles.tri[j].v.b.z < -1 || triangles.tri[j].v.b.z > 1)
         speeds.tri[j].v.b.z = -speeds.tri[j].v.b.z;
-      if (triangles.tri[j].v.c.x < -1 || triangles.tri[j].v.c.x > 1)
+        if (triangles.tri[j].v.c.x < -1 || triangles.tri[j].v.c.x > 1)
         speeds.tri[j].v.c.x = -speeds.tri[j].v.c.x;
-      if (triangles.tri[j].v.c.y < -1 || triangles.tri[j].v.c.y > 1)
+        if (triangles.tri[j].v.c.y < -1 || triangles.tri[j].v.c.y > 1)
         speeds.tri[j].v.c.y = -speeds.tri[j].v.c.y;
-      if (triangles.tri[j].v.c.z < -1 || triangles.tri[j].v.c.z > 1)
+        if (triangles.tri[j].v.c.z < -1 || triangles.tri[j].v.c.z > 1)
         speeds.tri[j].v.c.z = -speeds.tri[j].v.c.z;
-    }
-    for (int i = 0; i < test_image.x; i++) {
-      for (int j = 0; j < test_image.y; j++) {
-        test_image.pixels[i][j] = 0.1;
       }
-    }
-    for (int i = 0; i < anothertest.x; i++) {
-      for (int j = 0; j < anothertest.y; j++) {
-        anothertest.pixels[i][j] = 0.1;
+      for (int i = 0; i < test_image.x; i++) {
+        for (int j = 0; j < test_image.y; j++) {
+          test_image.pixels[(i*test_image.y)+j] = 0.1;
+          //test_image.pixels[i][j] = 0.1;
+        }
       }
+      //for (int i = 0; i < anothertest.x; i++) {
+      //  for (int j = 0; j < anothertest.y; j++) {
+      //    anothertest.pixels[(i*anothertest.y)+j] = 0.1;
+      //    //anothertest.pixels[i][j] = 0.1;
+      //  }
+      //}
+      //for (int i = 0; i < test3.x; i++) {
+      //  for (int j = 0; j < test3.y; j++) {
+      //    test3.pixels[(i*test3.y)+j] = 0.1;
+      //    //anothertest.pixels[i][j] = 0.1;
+      //  }
+      //}
+      //    start_timer();
+      //rotation += window.getinputs();
+      //    print_timer();
+      start_timer();
+      gfx.render(&cube, &test_image, rotation);//, &anothertest, &test3);
+      print_timer(&file, 0);
+      //    start_timer();
+      out.rgbf_rgba(&test_image, imga);
+      //out.rgbf_rgba(&anothertest, imga2);
+      //out.rgbf_rgba(&test3, imga3);
+      //    print_timer();
+      //    start_timer();
+      window.display_image(imga, &test_image);
+      //window2.display_image(imga2, &anothertest);
+      //window3.display_image(imga3, &test3);
+      //    print_timer();
+      //    start_timer();
+      //out.output_image(&test_image, fram++); // this will put the frames in build/images 
+      //    print_timer();
+      //    std::cout << '\n';
     }
-    start_timer();
-    gfx.render(&cube, &test_image, &anothertest);
-    print_timer();
-    start_timer();
-    out.rgbf_rgba(&test_image, imga);
-    out.rgbf_rgba(&anothertest, imga2);
-    print_timer();
-    start_timer();
-    window.display_image(imga, &test_image);
-    window2.display_image(imga2, &anothertest);
-    print_timer();
-    start_timer();
-    //out.output_image(&test_image, fram++); // this will put the frames in build/images 
-    print_timer();
-    std::cout << '\n';
-  }
-  window.~OGLwindow();
-  window2.~OGLwindow();
+    //window.~OGLwindow();
+    file.close();
+  //window2.~OGLwindow();
   return 0;
 }
