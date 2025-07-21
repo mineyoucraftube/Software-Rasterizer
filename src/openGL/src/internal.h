@@ -25,6 +25,8 @@
 //
 //========================================================================
 
+//this is modified from the original source, see //modif and //endmodif in the next few lines
+
 #pragma once
 //modif
 #ifdef _WIN32
@@ -34,6 +36,10 @@
     #define _GLFW_X11 1
 //    #define _GLFW_WAYLAND 1
 #endif
+#ifdef __APPLE__
+    #define _GLFW_COCOA
+#endif
+//endmodif
 
 #if defined(_GLFW_USE_CONFIG_H)
  #include "glfw_config.h"
