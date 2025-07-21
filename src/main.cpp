@@ -11,8 +11,9 @@
 output out;
 graphics gfx;
 objparser obp;
-//OGLwindow window(1024, 1024);
-//OGLwindow window2(1024, 1024);
+OGLwindow window(1024, 1024, "HI MOM 0");
+OGLwindow window2(1024, 1024, "HI MOM 1");
+OGLwindow window3(1024, 1024, "HI MOM 2");
 
 std::chrono::steady_clock::time_point start;
 void start_timer() {
@@ -100,8 +101,9 @@ void print_simple_model_info(simple_object model) {
 
 unsigned char imga[1024*1024*4];
 unsigned char imga2[1024*1024*4];
+unsigned char imga3[1024*1024*4];
 int fram = 0;
-Image test_image, anothertest;
+Image test_image, anothertest, test3;
 float3 rotation = 0;
 int main() {
   obj_object testing = obp.parse("models/suzanne3.obj");
@@ -122,8 +124,8 @@ int main() {
   // output_obj_model(testing);
   std::fstream file("times.txt", std::ios::out | std::ios::binary);
   if (!file.is_open()) {return 1;}
-  for (int i = 0; i < 1000; i++) {
-    //while (!window.shouldclose()) {
+  //for (int i = 0; i < 1000; i++) {
+  while (!window.shouldclose()) {
       for (int j = 0; j < triangles.num_triangle; j++) {
         triangles.tri[j].v.a = triangles.tri[j].v.a + speeds.tri[j].v.a;
         triangles.tri[j].v.b = triangles.tri[j].v.b + speeds.tri[j].v.b;
@@ -159,19 +161,27 @@ int main() {
           //anothertest.pixels[i][j] = 0.1;
         }
       }
+      for (int i = 0; i < test3.x; i++) {
+        for (int j = 0; j < test3.y; j++) {
+          test3.pixels[(i*test3.y)+j] = 0.1;
+          //anothertest.pixels[i][j] = 0.1;
+        }
+      }
       //    start_timer();
       //rotation += window.getinputs();
       //    print_timer();
       start_timer();
-      gfx.render(&cube, &test_image);//, rotation, &anothertest);
-      print_timer(&file, i);
+      gfx.render(&cube, &test_image, rotation, &anothertest, &test3);
+      print_timer(&file, 0);
       //    start_timer();
       out.rgbf_rgba(&test_image, imga);
       out.rgbf_rgba(&anothertest, imga2);
+      out.rgbf_rgba(&test3, imga3);
       //    print_timer();
       //    start_timer();
-      //window.display_image(imga, &test_image);
-      //window2.display_image(imga2, &anothertest);
+      window.display_image(imga, &test_image);
+      window2.display_image(imga2, &anothertest);
+      window3.display_image(imga3, &test3);
       //    print_timer();
       //    start_timer();
       //out.output_image(&test_image, fram++); // this will put the frames in build/images 

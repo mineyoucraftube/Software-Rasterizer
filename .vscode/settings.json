@@ -113,6 +113,7 @@
     "variant": "cpp",
     "complex": "cpp",
     "map": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "xiosbase": "cpp"
   }
 }

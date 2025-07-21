@@ -39,8 +39,8 @@ struct simple_object {
 };
 
 struct Image {
-  int x = image_x;
-  int y = image_y;
+  const int x = image_x;
+  const int y = image_y;
   float3 pixels[image_x*image_y];
   //float3 pixels[image_x][image_y];
 };
@@ -54,5 +54,5 @@ class graphics {
   bool PointInTriangle(triangle2 trig, float2 p);
   float2 WorldToScreen(float3 a, int x, int y);
 
-  void render(simple_object* cube, Image* image);//, float3 rot, Image* image2);
+  void render(simple_object* cube, Image* image, float3 rot, Image* image2, Image* image3);
 };
