@@ -50,6 +50,7 @@ struct obj_object {
 
 class objparser {
  private:
+ bool rewind_verts;
   obj_object get_obj_params(char* file, size_t size);
   float parsefloat(char* file, indexing* index);
   int parseint(char* file, indexing* index);

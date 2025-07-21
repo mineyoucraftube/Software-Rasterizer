@@ -2,6 +2,7 @@
 # www.blender.org
 mtllib suzanne3.mtl
 o Suzanne
+r
 v 0.437500 0.164062 0.765625
 v -0.437500 0.164062 0.765625
 v 0.500000 0.093750 0.687500

@@ -8,7 +8,7 @@ float2 graphics::perpendicular(float2 a) {
   return float2(a.y, -a.x);
 }
 bool graphics::PointOnRightSideOfLine(float2 a, float2 b, float2 p) {
-  return (dot(p - a, perpendicular(b - a)) > 0);
+  return dot(p - a, perpendicular(b - a)) >= 0;
 }
 
 float distance(float2 a, float2 b){
@@ -16,15 +16,15 @@ float distance(float2 a, float2 b){
 }
 
 bool graphics::PointInTriangle(triangle2 trig, float2 p) {
-  bool ab = PointOnRightSideOfLine(trig.a, trig.b, p);
+  //bool ab = PointOnRightSideOfLine(trig.a, trig.b, p);
   bool bc = PointOnRightSideOfLine(trig.b, trig.c, p);
-  bool ca = PointOnRightSideOfLine(trig.c, trig.a, p);
+  //bool ca = PointOnRightSideOfLine(trig.c, trig.a, p);
   //  if (ab && bc && ca);
   //   throw("a");
-  return ab == bc && bc == ca;
+  //return ab == bc && bc == ca;
   //return ab && bc && ca;
   // return PointOnRightSideOfLine(trig.a, trig.b, p) == bc && bc == PointOnRightSideOfLine(trig.c, trig.a, p);
-  //return PointOnRightSideOfLine(trig.a, trig.b, p) == bc && bc == PointOnRightSideOfLine(trig.c, trig.a, p);
+  return PointOnRightSideOfLine(trig.a, trig.b, p) == bc && bc == PointOnRightSideOfLine(trig.c, trig.a, p);
   //return !PointOnRightSideOfLine(trig.a, trig.b, p) && !PointOnRightSideOfLine(trig.b, trig.c, p) && !PointOnRightSideOfLine(trig.c, trig.a, p);
   //return PointOnRightSideOfLine(trig.a, trig.b, p) && PointOnRightSideOfLine(trig.b, trig.c, p) && PointOnRightSideOfLine(trig.c, trig.a, p);
 }
@@ -118,7 +118,7 @@ triangle yaw_trig(triangle trig, float3 rot){
 
 Image zbuf;
 float yyy = 0;
-void graphics::render(simple_object* cube, Image* image, float3 rot, Image* image2, Image* image3) {
+void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* image2, Image* image3) {
   float screenposFx;
   float screenposFy;
   const int y = image->y;
@@ -138,8 +138,8 @@ void graphics::render(simple_object* cube, Image* image, float3 rot, Image* imag
     rot.y = yyy;
     rot.z = 0;
     curtri = yaw_trig(cube->tri[i], rot);
-    //if (curtri.n.z <= 0) 
-    //continue;
+    if (curtri.n.z <= 0) 
+    continue;
       triangle2 trig;
 
       trig.a = WorldToScreen(curtri.v.a, image->x, image->y);
@@ -162,34 +162,19 @@ void graphics::render(simple_object* cube, Image* image, float3 rot, Image* imag
         for (int k = iminy; k < imaxy; k++) {
           //l = (j*y)+k;
           l = (j*1024)+k;
-          //if(!(zbuf.pixels[l].x < (curtri.v.a.z + curtri.v.b.z + curtri.v.c.z)))
+          if(!(zbuf.pixels[l].x < (curtri.v.a.z + curtri.v.b.z + curtri.v.c.z)))
           //if(!(zbuf.pixels[j][k].x < (curtri.v.a.z + curtri.v.b.z + curtri.v.c.z)))
-          //  continue;
-          //if (!PointInTriangle(trig, float2(j, k)))
-          //  continue;
+            continue;
+          if (!PointInTriangle(trig, float2(j, k)))//inverted because if true, we >>skip<<, guess why i left this comment...
+            continue;
           zbuf.pixels[l].x = curtri.v.a.z + curtri.v.b.z + curtri.v.c.z;
-          
-          float ap = (testPointOnRightSideOfLine(trig.a, trig.b, float2(j, k))/distance(trig.a,trig.b))/512;
-          float bp = (testPointOnRightSideOfLine(trig.b, trig.c, float2(j, k))/distance(trig.b,trig.c))/512;
-          float cp = (testPointOnRightSideOfLine(trig.c, trig.a, float2(j, k))/distance(trig.c,trig.a))/512;
-          
-          //float totp = ((ap + bp + cp)/3);
-
-          image->pixels[l].y = math::max(ap, 0);//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          image->pixels[l].x = math::max(-ap, 0);//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          image->pixels[l].z = testPointInTriangle(trig, float2(j, k));
-          image2->pixels[l].y = math::max(bp, 0);//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          image2->pixels[l].x = math::max(-bp, 0);//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          
-          image3->pixels[l].y = math::max(cp, 0);//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          image3->pixels[l].x = math::max(-cp, 0);//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
-          //std::cout << image->pixels[l].x << '\n';
+        
           
           //zbuf.pixels[j][k].x = curtri.v.a.z + curtri.v.b.z + curtri.v.c.z;
           // image->pixels[j][k].x = curtri.color.x;
           // image->pixels[j][k].y = curtri.color.y;
           // image->pixels[j][k].z = curtri.color.z;
-          //image->pixels[l] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+          image->pixels[l] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
           //image->pixels[j][k] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
           //image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
         }
