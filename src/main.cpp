@@ -15,6 +15,7 @@ OGLwindow window(1024, 1024, "HI MOM 0");
 //OGLwindow window2(1024, 1024, "HI MOM 1");
 //OGLwindow window3(1024, 1024, "HI MOM 2");
 
+#ifdef _WIN32
 std::chrono::steady_clock::time_point start;
 void start_timer() {
   start = std::chrono::high_resolution_clock::now();
@@ -24,6 +25,19 @@ void print_timer(std::fstream* file, int i) {
   std::cout << i << "\t" << a << "\n";
   *file << a << "\n";
 }
+#endif
+#ifdef __gnu_linux__
+std::chrono::_V2::system_clock::time_point start;
+void start_timer() {
+  start = std::chrono::high_resolution_clock::now();
+}
+void print_timer(std::fstream* file, int i) {
+  int a = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start).count();
+  std::cout << i << "\t" << a << "\n";
+  *file << a << "\n";
+}
+#endif
+
 void print_obj_model_info(obj_object model) {
   std::cout << "num_vertice: " << model.num_vertice << '\n';
   std::cout << "num_normal: " << model.num_normal << '\n';
