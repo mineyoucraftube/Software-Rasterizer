@@ -37,10 +37,11 @@ SRC = $(_SRCC) $(_SRCCPP) $(_SRCOGL)
 _OBJC = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR_C)/%.o, $(wildcard $(SRC_DIR)/*.c))
 _OBJCPP = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR_CPP)/%.o, $(wildcard $(SRC_DIR)/*.cpp))
 _OBJOGL = $(patsubst $(SRC_DIR_OGL)/%.c, $(OBJ_DIR_OGL)/%.o, $(wildcard $(SRC_DIR_OGL)/*.c))
-_APLOBJOGL = $(patsubst $(SRC_DIR_OGL)/%.m, $(OBJ_DIR_OGL)/%.o, $(wildcard $(SRC_DIR_OGL)/*.m))
+#_APLOBJOGL = $(patsubst $(SRC_DIR_OGL)/%.m, $(OBJ_DIR_OGL)/%.o, $(wildcard $(SRC_DIR_OGL)/*.m))
 OBJ = $(_OBJC) $(_OBJCPP) $(_OBJOGL)
 OBJ_project = $(_OBJC) $(_OBJCPP)
-OBJ_opengl = $(_OBJOGL) $(_APLOBJOGL)
+OBJ_opengl = $(_OBJOGL)
+#OBJ_opengl = $(_OBJOGL) $(_APLOBJOGL)
 
 
 SRC_C	= $(SRC_DIR)/%.c
@@ -73,9 +74,9 @@ $(OBJ_OGL): $(SRC_OGL)
 	@mkdir -p $(OBJ_DIR_OGL)
 	$(CC) $(CFLAGS) -c $^ -o $@ -I $(INC_DIR)
 
-$(OBJ_OGL): $(APL_SRC_OGL)
-	@mkdir -p $(OBJ_DIR_OGL)
-	$(CC) $(CFLAGS) -c $^ -o $@ -I $(INC_DIR)
+#$(OBJ_OGL): $(APL_SRC_OGL)
+#	@mkdir -p $(OBJ_DIR_OGL)
+#	$(CC) $(CFLAGS) -c $^ -o $@ -I $(INC_DIR)
 
 $(LIB): $(OBJ_opengl)
 	@mkdir -p $(LIB_DIR)
