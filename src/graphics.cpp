@@ -181,7 +181,7 @@ void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* 
       }
     
   }
-    yyy+= 2*3.141592654/500;
+    yyy+= 2*3.141592654/100;
   if(yyy > 2*3.141592654) yyy -= 2*3.141592654;
 
 }
