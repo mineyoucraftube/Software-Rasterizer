@@ -54,13 +54,14 @@ bool testPointInTriangle(triangle2 trig, float2 p) {
 }
 
 
-float2 VertexToScreen(float3 a, int x = 1024, int y = 1024) {
-  /*float screenHeight_world = 2;
-  float pixelsPerWorldUnit = y / screenHeight_world;
+float2 VertexToScreen(float3 a, int2 screensize, float fov = 60) {
+  
+  float screenHeight_world = tan((fov/180*3.141592654)/2)*2;
+  float pixelsPerWorldUnit = screensize.y / screenHeight_world / -a.z;
 
   float2 pixelOffset = float2(a.x, a.y) * pixelsPerWorldUnit;
-  return float2(x, y) / 2 + pixelOffset;*/
-
+  return float2(screensize.x, screensize.y) / 2 + pixelOffset;
+/*
   // return float2(x, y) / 2 + (float2(a.x, a.y) * (y / 6.0f));              // 25153
   // return ((float2(x, y) * 3) + (float2(a.x, a.y) * y)) / 6;               // 25618
   // return float2(x / 2 + (a.x * (y / 6.0f)), y / 2 + (a.y * (y / 6.0f)));  // 24980
@@ -79,18 +80,19 @@ float2 VertexToScreen(float3 a, int x = 1024, int y = 1024) {
   // return float2(x, y) / 2 + float2(a.x, a.y) * y / 6;                   // 25230
   // return float2((x * 3 + a.x * y) / 6, (y * 3 + a.y * y) / 6);          // 25276
   // return ((float2(x, y) * 3) + (float2(a.x, a.y) * y)) / 6;             // 25618
+  */
 }
-float2 graphics::WorldToScreen(float3 a, int x = 1024, int y = 1024) {
-  return VertexToScreen(a, x, y);
+float2 graphics::WorldToScreen(float3 a, int2 screensize) {
+  return VertexToScreen(a, screensize);
 }
 
 triangle yaw_trig(triangle trig, float3 rot){
   triangle *temptrig;
   temptrig = new triangle;
-
-  temptrig->v.a = transform::toworldpoint(trig.v.a, rot);
-  temptrig->v.b = transform::toworldpoint(trig.v.b, rot);
-  temptrig->v.c = transform::toworldpoint(trig.v.c, rot);
+  float3 translation = float3(0, 0, -3);
+  temptrig->v.a = transform::toworldpoint(trig.v.a, rot, translation);
+  temptrig->v.b = transform::toworldpoint(trig.v.b, rot, translation);
+  temptrig->v.c = transform::toworldpoint(trig.v.c, rot, translation);
   temptrig->n = transform::toworldpoint(trig.n, rot);
 
 
@@ -116,12 +118,15 @@ triangle yaw_trig(triangle trig, float3 rot){
   return *temptrig;
 }
 
+//int
+
+
 Image zbuf;
 float yyy = 0;
 void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* image2, Image* image3) {
   float screenposFx;
   float screenposFy;
-  const int y = image->y;
+  const int y = image->size.y;
   triangle curtri;
   //for (int i = 0; i < zbuf.x; i++) {
   for (int i = 0; i < 1048576; i++) {
@@ -142,15 +147,15 @@ void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* 
     continue;
       triangle2 trig;
 
-      trig.a = WorldToScreen(curtri.v.a, image->x, image->y);
-      trig.b = WorldToScreen(curtri.v.b, image->x, image->y);
-      trig.c = WorldToScreen(curtri.v.c, image->x, image->y);
+      trig.a = WorldToScreen(curtri.v.a, image->size);
+      trig.b = WorldToScreen(curtri.v.b, image->size);
+      trig.c = WorldToScreen(curtri.v.c, image->size);
 
-      float iminx = math::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0, image->x);
-      float iminy = math::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0, image->y);
+      float iminx = math::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0, image->size.x);
+      float iminy = math::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0, image->size.y);
 
-      float imaxx = math::clamp(mmax(mmax(trig.a.x, trig.b.x), trig.c.x), 0, image->x);
-      float imaxy = math::clamp(mmax(mmax(trig.a.y, trig.b.y), trig.c.y), 0, image->y);
+      float imaxx = math::clamp(mmax(mmax(trig.a.x, trig.b.x), trig.c.x), 0, image->size.x);
+      float imaxy = math::clamp(mmax(mmax(trig.a.y, trig.b.y), trig.c.y), 0, image->size.y);
 
       //int iminx = std::clamp(std::min(std::min(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x);
       //int iminy = std::clamp(std::min(std::min(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y);

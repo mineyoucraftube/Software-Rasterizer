@@ -27,34 +27,34 @@ void inttohex(int a, char* charhex) {
 
 int output::output_image(Image* image, int frame_num) {
   uint8_t* image_buffer;
-  image_buffer = new uint8_t[(54 + (image->x * image->y * 4))];
+  image_buffer = new uint8_t[(54 + (image->size.x * image->size.y * 4))];
 
   // BMP Header
   image_buffer[0x00] = 'B';
   image_buffer[0x01] = 'M';
-  u32_to_array(image_buffer, 0x02, 54 + (image->x * image->y * 4));  //
+  u32_to_array(image_buffer, 0x02, 54 + (image->size.x * image->size.y * 4));  //
   u16_to_array(image_buffer, 0x06, 0);
   u16_to_array(image_buffer, 0x08, 0);
   u32_to_array(image_buffer, 0x0A, 54);
 
   // DIB Header
   u32_to_array(image_buffer, 0x0E, 40);
-  u32_to_array(image_buffer, 0x12, image->x);
-  u32_to_array(image_buffer, 0x16, image->y);
+  u32_to_array(image_buffer, 0x12, image->size.x);
+  u32_to_array(image_buffer, 0x16, image->size.y);
   u16_to_array(image_buffer, 0x1A, 1);
   u16_to_array(image_buffer, 0x1C, 8 * 4);
   u32_to_array(image_buffer, 0x1E, 0);
-  u32_to_array(image_buffer, 0x22, image->x * image->y * 4);
+  u32_to_array(image_buffer, 0x22, image->size.x * image->size.y * 4);
   u32_to_array(image_buffer, 0x26, 0);
   u32_to_array(image_buffer, 0x2A, 0);
   u32_to_array(image_buffer, 0x2E, 0);
   u32_to_array(image_buffer, 0x32, 0);
   int k;
   int index = 0;
-  for (int i = 0; i < image->y; i++) {
-    for (int j = 0; j < image->x; j++) {
-      k = (i * image->x) + j;
-      float3* pix = &image->pixels[(j*image->y)+i];
+  for (int i = 0; i < image->size.y; i++) {
+    for (int j = 0; j < image->size.x; j++) {
+      k = (i * image->size.x) + j;
+      float3* pix = &image->pixels[(j*image->size.y)+i];
       //float3* pix = &image->pixels[j][i];
       image_buffer[0x36 + (k * 4) + 0] = (pix->x) * 255;
       image_buffer[0x36 + (k * 4) + 1] = (pix->y) * 255;
@@ -95,7 +95,7 @@ int output::output_image(Image* image, int frame_num) {
   }
   std::ofstream file(imagename, std::ios::out | std::ios::binary);
   if (file.is_open()) {
-    file.write((char*)image_buffer, 54 + (image->x * image->y * 4));
+    file.write((char*)image_buffer, 54 + (image->size.x * image->size.y * 4));
     file.close();
   } else
     std::cout << "Unable to open file";
@@ -104,10 +104,10 @@ int output::output_image(Image* image, int frame_num) {
 
 void output::rgbf_rgba(Image* image, unsigned char* imga) {
   int k;
-  for (int i = 0; i < image->y; i++) {
-    for (int j = 0; j < image->x; j++) {
-      k = (i * image->x) + j;
-      float3* pix = &image->pixels[(j*image->y)+i];
+  for (int i = 0; i < image->size.y; i++) {
+    for (int j = 0; j < image->size.x; j++) {
+      k = (i * image->size.x) + j;
+      float3* pix = &image->pixels[(j*image->size.y)+i];
       //float3* pix = &image->pixels[j][i];
       imga[(k * 4) + 0] = (pix->x) * 255;
       imga[(k * 4) + 1] = (pix->y) * 255;

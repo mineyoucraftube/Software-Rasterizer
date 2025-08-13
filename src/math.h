@@ -5,7 +5,7 @@
 #define mmax(a, b) ((a) > (b) ? (a) : (b))
 #define mmap(x, in_min, in_max, out_min, out_max) (float(((x) - (in_min)) * ((out_max) - (out_min))) / ((in_max) - (in_min)) + (out_min))
 
-struct float3;
+//struct float3;
 
 struct float2 {
   float x;
@@ -13,7 +13,7 @@ struct float2 {
 
   float2(float x = 0) : x(x), y(x) {}
   float2(float x, float y) : x(x), y(y) {}
-  float2(float3 a);
+  //float2(float3 a);
   float2 operator+(const float2& a) {
     return float2(x + a.x, y + a.y);
   }
@@ -59,6 +59,53 @@ struct float3 {
 
   float3 operator/(const float3& a) {
     return float3(x / a.x, y / a.y, z / a.z);
+  }
+};
+
+struct int2{
+  int x;
+  int y;
+
+  int2(int x = 0) : x(x), y(x) {}
+  int2(int x, int y) : x(x), y(y) {}
+  int2 operator+(const int2& a) {
+    return int2(x + a.x, y + a.y);
+  }
+
+  int2 operator-(const int2& a) {
+    return int2(x - a.x, y - a.y);
+  }
+
+  int2 operator*(const int2& a) {
+    return int2(x * a.x, y * a.y);
+  }
+
+  int2 operator/(const int2& a) {
+    return int2(x / a.x, y / a.y);
+  }
+
+};
+
+struct int3 {
+  float x;
+  float y;
+  float z;
+  int3(float x, float y, float z) : x(x), y(y), z(z) {}
+  int3(float x = 0) : x(x), y(x), z(x) {}
+
+  int3 operator+(const int3& a) {
+    return int3(x + a.x, y + a.y, z + a.z);
+  }
+
+  int3 operator-(const int3& a) {
+    return int3(x - a.x, y - a.y, z - a.z);
+  }
+
+  int3 operator*(const int3& a) {
+    return int3(x * a.x, y * a.y, z * a.z);
+  }
+  int3 operator/(const int3& a) {
+    return int3(x / a.x, y / a.y, z / a.z);
   }
 };
 

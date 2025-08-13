@@ -28,10 +28,6 @@ std::string get_file_contents(const char* filename) {
   }
   throw(errno);
 }
-struct int2 {
-  int x;
-  int y;
-};
 
 struct OGLwindow::properties {
   int2 window_size;

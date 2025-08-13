@@ -2,9 +2,9 @@
 #include <cstddef>
 #include <iostream>
 #include "math.h"
-#include "typedef.h"
 #include "number.h"
 #include "transform.h"
+#include "typedef.h"
 #define image_x 1024
 #define image_y 1024
 struct triangle3 {
@@ -39,10 +39,9 @@ struct simple_object {
 };
 
 struct Image {
-  const int x = image_x;
-  const int y = image_y;
-  float3 pixels[image_x*image_y];
-  //float3 pixels[image_x][image_y];
+  const int2 size = int2(image_x, image_y);
+  float3 pixels[image_x * image_y];
+  // float3 pixels[image_x][image_y];
 };
 
 class graphics {
@@ -52,7 +51,7 @@ class graphics {
   float2 perpendicular(float2 a);
   bool PointOnRightSideOfLine(float2 a, float2 b, float2 p);
   bool PointInTriangle(triangle2 trig, float2 p);
-  float2 WorldToScreen(float3 a, int x, int y);
+  float2 WorldToScreen(float3 a, int2 screensize);
 
-  void render(simple_object* cube, Image* image, float3 rot);//, Image* image2, Image* image3);
+  void render(simple_object* cube, Image* image, float3 rot);  //, Image* image2, Image* image3);
 };

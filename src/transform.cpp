@@ -1,36 +1,86 @@
 #include "transform.h"
 
+matrix3::matrix3(float3 rotation) {
+  /*  
+  matrix3 y, p, r, yp;
+  y.ihat = float3(cos(rotation.y) , 0          , -sin(rotation.y));
+  y.jhat = float3(0          , 1          , 0          );
+  y.khat = float3(sin(rotation.y) , 0          , cos(rotation.y) );
+
+  p.ihat = float3(1          , 0          , 0          );
+  p.jhat = float3(0          , cos(rotation.x) , -sin(rotation.x));
+  p.khat = float3(0          , sin(rotation.x) , cos(rotation.x) );
+  
+  r.ihat = float3(cos(rotation.z) , -sin(rotation.z), 0          );
+  r.jhat = float3(sin(rotation.z) , cos(rotation.z) , 0          );
+  r.khat = float3(0          , 0          , 1          );
+  
+  yp.ihat = (y.ihat *  p.ihat.x) + ( y.jhat *  p.ihat.y) + ( y.khat *  p.ihat.z);
+  yp.jhat = (y.ihat *  p.jhat.x) + ( y.jhat *  p.jhat.y) + ( y.khat *  p.jhat.z);
+  yp.khat = (y.ihat *  p.khat.x) + ( y.jhat *  p.khat.y) + ( y.khat *  p.khat.z);
+
+  ihat = (yp.ihat *  r.ihat.x) + ( yp.jhat *  r.ihat.y) + ( yp.khat *  r.ihat.z);
+  jhat = (yp.ihat *  r.jhat.x) + ( yp.jhat *  r.jhat.y) + ( yp.khat *  r.jhat.z);
+  khat = (yp.ihat *  r.khat.x) + ( yp.jhat *  r.khat.y) + ( yp.khat *  r.khat.z);*/
+  float sx = sin(rotation.x);
+  float sy = sin(rotation.y);
+  float sz = sin(rotation.z);
+  float cx = cos(rotation.x);
+  float cy = cos(rotation.y);
+  float cz = cos(rotation.z);
+  
+  ihat = float3((cy * cz) + (sy *-sx *-sz), cx *-sz, (-sy * cz) + (cy *-sx *-sz));
+  jhat = float3((cy * sz) + (sy *-sx * cz), cx * cz, (-sy * sz) + (cy *-sx * cz));
+  khat = float3( sy * cx                  , sx     , cy * cx);
+
+
+}
+
+matrix3 matrix3::operator*(const matrix3& a) {
+  matrix3 mat;
+  mat.ihat = (ihat *  a.ihat.x) + ( jhat *  a.ihat.y) + ( khat *  a.ihat.z);
+  mat.jhat = (ihat *  a.jhat.x) + ( jhat *  a.jhat.y) + ( khat *  a.jhat.z);
+  mat.khat = (ihat *  a.khat.x) + ( jhat *  a.khat.y) + ( khat *  a.khat.z);
+  return mat;
+}
+
 float3 transformvector(float3 ihat, float3 jhat, float3 khat, float3 v){
   return (ihat * v.x) + (jhat * v.y) + (khat * v.z);
 }
+float3 transformvector(matrix3 mat, float3 v){
+  return (mat.ihat * v.x) + (mat.jhat * v.y) + (mat.khat * v.z);
+}
 
 void getbasisvectors(float3* ihat, float3* jhat, float3* khat, float3 rot){
-  float3 ihaty = float3(cos(rot.y) , 0        , -sin(rot.y));
-  float3 jhaty = float3(0        , 1        , 0        );
-  float3 khaty = float3(sin(rot.y) , 0        , cos(rot.y) );
+  matrix3 y, p, r, yp;
+  y.ihat = float3(cos(rot.y), 0         ,-sin(rot.y));
+  y.jhat = float3(0         , 1         , 0         );
+  y.khat = float3(sin(rot.y), 0         , cos(rot.y));
 
-  float3 ihatp = float3(1          , 0          , 0          );
-  float3 jhatp = float3(0          , cos(rot.x) , -sin(rot.x));
-  float3 khatp = float3(0          , sin(rot.x) , cos(rot.x) );
+  p.ihat = float3(1         , 0         , 0         );
+  p.jhat = float3(0         , cos(rot.x),-sin(rot.x));
+  p.khat = float3(0         , sin(rot.x), cos(rot.x));
   
-  float3 ihatr = float3(cos(rot.z) , -sin(rot.z), 0         );
-  float3 jhatr = float3(sin(rot.z) , cos(rot.z) , 0         );
-  float3 khatr = float3(0         , 0         , 1         );
+  r.ihat = float3(cos(rot.z),-sin(rot.z), 0         );
+  r.jhat = float3(sin(rot.z), cos(rot.z), 0         );
+  r.khat = float3(0         , 0         , 1         );
   
-  float3 ihatyp = transformvector(ihaty, jhaty, khaty, ihatp);
-  float3 jhatyp = transformvector(ihaty, jhaty, khaty, jhatp);
-  float3 khatyp = transformvector(ihaty, jhaty, khaty, khatp);
+  yp.ihat = transformvector(y.ihat, y.jhat, y.khat, p.ihat);
+  yp.jhat = transformvector(y.ihat, y.jhat, y.khat, p.jhat);
+  yp.khat = transformvector(y.ihat, y.jhat, y.khat, p.khat);
 
-  *ihat = transformvector(ihatyp, jhatyp, khatyp, ihatr);
-  *jhat = transformvector(ihatyp, jhatyp, khatyp, jhatr);
-  *khat = transformvector(ihatyp, jhatyp, khatyp, khatr);
+  *ihat = transformvector(yp.ihat, yp.jhat, yp.khat, r.ihat);
+  *jhat = transformvector(yp.ihat, yp.jhat, yp.khat, r.jhat);
+  *khat = transformvector(yp.ihat, yp.jhat, yp.khat, r.khat);
 }
 
 
-float3 transform::toworldpoint(float3 p, float3 rot) {
-  float3 ihat, jhat, khat;
-  getbasisvectors(&ihat, &jhat, &khat, rot);
-  return transformvector(ihat, jhat, khat, p);
+float3 transform::toworldpoint(float3 p, float3 rot, float3 tra) {
+  //float3 ihat, jhat, khat;
+  //getbasisvectors(&ihat, &jhat, &khat, rot);
+  //return transformvector(ihat, jhat, khat, p);
+  matrix3 mat(rot);
+  return transformvector(mat, p)+tra;
 }
 
 /*

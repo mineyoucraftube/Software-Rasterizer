@@ -163,9 +163,9 @@ int main() {
         if (triangles.tri[j].v.c.z < -1 || triangles.tri[j].v.c.z > 1)
         speeds.tri[j].v.c.z = -speeds.tri[j].v.c.z;
       }
-      for (int i = 0; i < test_image.x; i++) {
-        for (int j = 0; j < test_image.y; j++) {
-          test_image.pixels[(i*test_image.y)+j] = 0.1;
+      for (int i = 0; i < test_image.size.x; i++) {
+        for (int j = 0; j < test_image.size.y; j++) {
+          test_image.pixels[(i*test_image.size.y)+j] = 0.1;
           //test_image.pixels[i][j] = 0.1;
         }
       }
