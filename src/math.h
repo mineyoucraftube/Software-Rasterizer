@@ -62,6 +62,38 @@ struct float3 {
   }
 };
 
+struct float4 {
+  float x;
+  float y;
+  float z;
+  float w;
+  float4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
+  float4(float x = 0) : x(x), y(x), z(x) {}
+
+  float4 operator+(const float4& a) {
+    return float4(x + a.x, y + a.y, z + a.z, w + a.w);
+  }
+
+  float4 operator+=(const float4& a) {
+    return float4(x += a.x, y += a.y, z += a.z, w += a.w);
+  }
+
+  float4 operator-(const float4& a) {
+    return float4(x - a.x, y - a.y, z - a.z, w - a.w);
+  }
+
+  float4 operator*(const float4& a) {
+    return float4(x * a.x, y * a.y, z * a.z, w * a.w);
+  }
+  float4 operator*(const float& a) {
+    return float4(x * a, y * a, z * a, w * a);
+  }
+
+  float4 operator/(const float4& a) {
+    return float4(x / a.x, y / a.y, z / a.z, w / a.w);
+  }
+};
+
 struct int2{
   int x;
   int y;

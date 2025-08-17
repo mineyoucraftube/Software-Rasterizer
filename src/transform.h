@@ -1,14 +1,15 @@
 #include "math.h"
 
-struct matrix3{
-  float3 ihat;
-  float3 jhat;
-  float3 khat;
-  matrix3(){
+struct matrix4{
+  float4 ihat;
+  float4 jhat;
+  float4 khat;
+  float4 lhat;
+  matrix4(){
 
   }
-  matrix3(float3 rotation);
-  matrix3 operator*(const matrix3& a);
+  matrix4(float3 rotation, float3 translation);
+  matrix4 operator*(const matrix4& a);
 };
 
 

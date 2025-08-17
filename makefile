@@ -88,6 +88,13 @@ $(OUT): $(OBJ_project) $(LIB)
 	@echo "\033[0;32mgood to go\033[0m"
 
 
+
+test: build/main.o $(OBJ_project) $(LIB)
+	@mkdir -p $(OUT_DIR)
+	$(CPP) $(patsubst $(OBJ_DIR_CPP)/main.o, build/main.o, $(OBJ_project)) $(LIB) -o $(OUT)
+	@echo "\033[0;32mgood to go\033[0m"
+
+
 run:
 	@mkdir -p build/images
 	-./$(OUT)
