@@ -1,3 +1,4 @@
+#pragma once
 #include "math.h"
 
 struct matrix4{
@@ -17,4 +18,5 @@ class transform {
  private:
  public:
  static float3 toworldpoint(float3 p, float3 rot, float3 tra = 0);
+ static float4 transformvector(matrix4 mat, float4 v);
 };

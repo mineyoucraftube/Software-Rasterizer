@@ -87,6 +87,9 @@ $(OUT): $(OBJ_project) $(LIB)
 	$(CPP) $(OBJ_project) $(LIB) -o $(OUT)
 	@echo "\033[0;32mgood to go\033[0m"
 
+build/main.o: main.cpp
+	@mkdir -p $(BUILD_DIR)
+	$(CPP) $(CFLAGS) -c $^ -o $@ -I $(INC_DIR)
 
 
 test: build/main.o $(OBJ_project) $(LIB)
