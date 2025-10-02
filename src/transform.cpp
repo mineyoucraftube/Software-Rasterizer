@@ -111,6 +111,8 @@ float3 transform::toworldpoint(float3 p, float3 rot, float3 tra) {
   //return transformvector(ihat, jhat, khat, p);
   matrix4 mat(rot, tra);
   //return transformvector(mat, p)+tra;
+  float4 a = transformvector(mat, float4(p.x,p.y,p.z,0));
+  return float3(a.x,a.y,a.z)+tra;
   return 0;
 }
 
