@@ -1,8 +1,11 @@
+
 @echo off
 set vc_vars_all="C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Auxiliary/Build/vcvarsall.bat"
 
 if "%VisualStudioVersion%" equ "" call %vc_vars_all% x64
 setlocal EnableDelayedExpansion
+echo %LIB%
+goto :eof
 
 set PROJECT_NAME=software_rasterizer
 
@@ -142,7 +145,7 @@ setlocal DisableDelayedExpansion
 set objs=%1
 set statlib=%2
 
-%LD% /nologo %objs:~1,-1% %statlib:~1,-1% /OUT:%OUT% %wininclude%
+echo %LD% /nologo %objs:~1,-1% %statlib:~1,-1% /OUT:%OUT% %wininclude%
 goto :eof
 
 setlocal EnableDelayedExpansion
