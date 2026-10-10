@@ -51,7 +51,9 @@ class graphics {
   float2 perpendicular(float2 a);
   bool PointOnRightSideOfLine(float2 a, float2 b, float2 p);
   bool PointInTriangle(triangle2 trig, float2 p);
+  bool WindingDirection(triangle3 trig);
+  bool WindingDirection(triangle2 trig);
   float2 WorldToScreen(float3 a, int2 screensize);
 
-  void render(simple_object* cube, Image* image, float3 rot);  //, Image* image2, Image* image3);
+  void render(simple_object* cube, Image* image, float3 rot, Image* image2);//, Image* image3);
 };

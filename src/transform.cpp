@@ -17,7 +17,12 @@ matrix4::matrix4(float3 rotation, float3 translation) {
   float ty = translation.y;
   float tz = translation.z;
    
-  matrix4 y, p, r, t, yp, mat;
+  matrix4 y;
+  matrix4 p;
+  matrix4 r;
+  matrix4 t;
+  //matrix4 yp;
+  matrix4 mat;
   //rows and cols are flipped here, too lazy to figure something else out
   p.ihat = float4(  1,  0,  0,  0);
   p.jhat = float4(  0, cx,-sx,  0);
@@ -34,10 +39,16 @@ matrix4::matrix4(float3 rotation, float3 translation) {
   r.khat = float4(  0,  0,  1,  0);
   r.lhat = float4(  0,  0,  0,  1);
 
+  //t.ihat = float4(  1,  0,  0, tx);
+  //t.jhat = float4(  0,  1,  0, ty);
+  //t.khat = float4(  0,  0,  1, tz);
+  //t.lhat = float4(  0,  0,  0,  1);
+
   t.ihat = float4(  1,  0,  0,  0);//tx);
   t.jhat = float4(  0,  1,  0,  0);//ty);
   t.khat = float4(  0,  0,  1,  0);//tz);
   t.lhat = float4( tx, ty, tz,  1);
+
   /*
   yp.ihat = (y.ihat *  p.ihat.x) + ( y.jhat *  p.ihat.y) + ( y.khat *  p.ihat.z);
   yp.jhat = (y.ihat *  p.jhat.x) + ( y.jhat *  p.jhat.y) + ( y.khat *  p.jhat.z);
@@ -47,7 +58,11 @@ matrix4::matrix4(float3 rotation, float3 translation) {
   jhat = (yp.ihat *  r.jhat.x) + ( yp.jhat *  r.jhat.y) + ( yp.khat *  r.jhat.z);
   khat = (yp.ihat *  r.khat.x) + ( yp.jhat *  r.khat.y) + ( yp.khat *  r.khat.z);
   */
-  mat = ((y*p)*r)*t;
+  //mat = ((y*p)*r)*t;
+  mat = t;
+  mat = mat*r;
+  mat = mat*p;
+  mat = mat*y;
   ihat = mat.ihat;
   jhat = mat.jhat;
   khat = mat.khat;
@@ -111,8 +126,8 @@ float3 transform::toworldpoint(float3 p, float3 rot, float3 tra) {
   //return transformvector(ihat, jhat, khat, p);
   matrix4 mat(rot, tra);
   //return transformvector(mat, p)+tra;
-  float4 a = transformvector(mat, float4(p.x,p.y,p.z,0));
-  return float3(a.x,a.y,a.z)+tra;
+  float4 a = transformvector(mat, float4(p.x,p.y,p.z,1));
+  return float3(a.x,a.y,a.z);//+tra;
   return 0;
 }
 

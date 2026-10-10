@@ -29,6 +29,14 @@ bool graphics::PointInTriangle(triangle2 trig, float2 p) {
   //return PointOnRightSideOfLine(trig.a, trig.b, p) && PointOnRightSideOfLine(trig.b, trig.c, p) && PointOnRightSideOfLine(trig.c, trig.a, p);
 }
 
+bool graphics::WindingDirection(triangle3 trig) {
+  return PointOnRightSideOfLine(float2(trig.a.x, trig.a.y), float2(trig.b.x, trig.b.y), float2(trig.c.x, trig.c.y));
+}
+
+bool graphics::WindingDirection(triangle2 trig) {
+  return PointOnRightSideOfLine(trig.a, trig.b, trig.c);
+}
+
 float testdot(float2 a, float2 b) {
   return (a.x * b.x) + (a.y * b.y);
 }
@@ -52,10 +60,13 @@ bool testPointInTriangle(triangle2 trig, float2 p) {
   //return !PointOnRightSideOfLine(trig.a, trig.b, p) && !PointOnRightSideOfLine(trig.b, trig.c, p) && !PointOnRightSideOfLine(trig.c, trig.a, p);
   return testPointOnRightSideOfLine(trig.a, trig.b, p) && testPointOnRightSideOfLine(trig.b, trig.c, p) && testPointOnRightSideOfLine(trig.c, trig.a, p);
 }
-
+float2 VertexToScreena(float3 a, int2 screensize, float fov = 60) {
+    return float2(screensize.x / 2 + (a.x * (screensize.y / 3.0f)), screensize.y / 2 + (a.y * (screensize.y / 3.0f)));  // 24980
+}
 
 float2 VertexToScreen(float3 a, int2 screensize, float fov = 60) {
   
+
   float screenHeight_world = tan((fov/180*3.141592654)/2)*2;
   float pixelsPerWorldUnit = screensize.y / screenHeight_world / -a.z;
 
@@ -97,6 +108,15 @@ triangle yaw_trig(triangle trig, float3 rot){
 
 
 /*
+  triangle temptrig;
+  //temptrig = new triangle;
+  float3 translation = float3(0, 0, -3);
+  temptrig.v.a = transform::toworldpoint(trig.v.a, rot, translation);
+  temptrig.v.b = transform::toworldpoint(trig.v.b, rot, translation);
+  temptrig.v.c = transform::toworldpoint(trig.v.c, rot, translation);
+  temptrig.n = transform::toworldpoint(trig.n, rot);
+*/
+/*
   temptrig->v.a.x = trig.v.a.x * cos(yaw)   + trig.v.a.y * 0    + trig.v.a.z * sin(yaw) ;
   temptrig->v.a.y = trig.v.a.x * 0          + trig.v.a.y * 1    + trig.v.a.z * 0        ;
   temptrig->v.a.z = trig.v.a.x * -sin(yaw)  + trig.v.a.y * 0    + trig.v.a.z * cos(yaw) ;
@@ -116,6 +136,7 @@ triangle yaw_trig(triangle trig, float3 rot){
   //std::cout << "trig " << temptrig->v.a.x << " ping " << temping->v.a.x << '\n';
 /**/
   return *temptrig;
+  //return temptrig;
 }
 
 //int
@@ -123,7 +144,7 @@ triangle yaw_trig(triangle trig, float3 rot){
 
 Image zbuf;
 float yyy = 0;
-void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* image2, Image* image3) {
+void graphics::render(simple_object* cube, Image* image, float3 rot, Image* image2){//, Image* image3) {
   float screenposFx;
   float screenposFy;
   const int y = image->size.y;
@@ -136,21 +157,36 @@ void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* 
       zbuf.pixels[i] = float3(-100000000, -100000000, -100000000);
     //}
   }
-
+if(yyy >= 2.349911305){
+  int i = 0;
+  i++;
+}
+int nculled = 0;
   for (int i = 0; i < cube->num_triangle; i++) {
     //curtri = cube->tri[i];
     rot.x = 0;
     rot.y = yyy;
     rot.z = 0;
     curtri = yaw_trig(cube->tri[i], rot);
-    if (curtri.n.z <= 0) 
-    continue;
+    //if (curtri.n.z <= 0) 
+    //continue;
       triangle2 trig;
-
+      nculled = WindingDirection(curtri.v);
       trig.a = WorldToScreen(curtri.v.a, image->size);
       trig.b = WorldToScreen(curtri.v.b, image->size);
       trig.c = WorldToScreen(curtri.v.c, image->size);
-
+      
+      if(WindingDirection(trig) == nculled) {
+        if (curtri.n.z <= 0) 
+          continue;
+      }else {
+        if (curtri.n.z > 0) 
+          continue;
+      }
+      //trig.a = float2(curtri.v.a.x, curtri.v.a.y) * 100;
+      //trig.b = float2(curtri.v.b.x, curtri.v.b.y) * 100;
+      //trig.c = float2(curtri.v.c.x, curtri.v.c.y) * 100;
+      {
       float iminx = math::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0, image->size.x);
       float iminy = math::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0, image->size.y);
 
@@ -162,6 +198,7 @@ void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* 
 
       //int imaxx = std::clamp(std::max(std::max(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x)+1;
       //int imaxy = std::clamp(std::max(std::max(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y)+1;
+      //std::cout << iminx << ' ' << imaxx << ' ' << iminy << ' ' << imaxy << '\n';
       int l = 0;
       for (int j = iminx; j < imaxx; j++) {
         for (int k = iminy; k < imaxy; k++) {
@@ -184,9 +221,47 @@ void graphics::render(simple_object* cube, Image* image, float3 rot){//, Image* 
           //image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
         }
       }
+    }
+      
     
+      trig.a = VertexToScreena(curtri.v.a, image2->size);
+      trig.b = VertexToScreena(curtri.v.b, image2->size);
+      trig.c = VertexToScreena(curtri.v.c, image2->size);
+      {
+      float iminx = math::clamp(mmin(mmin(trig.a.x, trig.b.x), trig.c.x), 0, image2->size.x);
+      float iminy = math::clamp(mmin(mmin(trig.a.y, trig.b.y), trig.c.y), 0, image2->size.y);
+
+      float imaxx = math::clamp(mmax(mmax(trig.a.x, trig.b.x), trig.c.x), 0, image2->size.x);
+      float imaxy = math::clamp(mmax(mmax(trig.a.y, trig.b.y), trig.c.y), 0, image2->size.y);
+
+      //int iminx = std::clamp(std::min(std::min(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x);
+      //int iminy = std::clamp(std::min(std::min(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y);
+
+      //int imaxx = std::clamp(std::max(std::max(trig.a.x, trig.b.x), trig.c.x), 0.0f, (float)image->x)+1;
+      //int imaxy = std::clamp(std::max(std::max(trig.a.y, trig.b.y), trig.c.y), 0.0f, (float)image->y)+1;
+      //std::cout << iminx << ' ' << imaxx << ' ' << iminy << ' ' << imaxy << '\n';
+      int l = 0;
+      for (int j = iminx; j < imaxx; j++) {
+        for (int k = iminy; k < imaxy; k++) {
+          //l = (j*y)+k;
+          l = (j*1024)+k;
+          if (!PointInTriangle(trig, float2(j, k)))//inverted because if true, we >>skip<<, guess why i left this comment...
+            continue;
+        
+          
+          //zbuf.pixels[j][k].x = curtri.v.a.z + curtri.v.b.z + curtri.v.c.z;
+          // image->pixels[j][k].x = curtri.color.x;
+          // image->pixels[j][k].y = curtri.color.y;
+          // image->pixels[j][k].z = curtri.color.z;
+          image2->pixels[l] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+          //image->pixels[j][k] = (curtri.n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+          //image2->pixels[j][k] = (cube->tri[i].n+1.0f)/2;//(number::randcoloring[i]);// * math::max(0, curtri.n.y + 1) / 2);  // + (curtri.color * 0.2);
+        }
+      }
+    }
+      
   }
-    yyy+= 2*3.141592654/100;
+    yyy+= 2*3.141592654/300;
   if(yyy > 2*3.141592654) yyy -= 2*3.141592654;
 
 }
